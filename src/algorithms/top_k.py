@@ -13,15 +13,16 @@ class MinHeapTopK:
     Min-Heap for Top-K selection.
     The root heap[0] holds the weakest survivor in the top K.
     """
-    def __init__(self, capacity, metrics=None, band_only=False):
+    def __init__(self, capacity, metrics=None, band_only=False, rule="standard"):
         self.capacity = capacity
         self.metrics = metrics
         self.band_only = band_only
+        self.rule = rule
         self.heap = []
 
     def _is_weaker(self, a, b):
         """Returns True if 'a' has lower triage priority than 'b'."""
-        return comes_before(b, a, self.metrics, self.band_only)
+        return comes_before(b, a, self.metrics, self.band_only, self.rule)
 
     def _sift_up(self, idx):
         current = idx
@@ -64,7 +65,7 @@ class MinHeapTopK:
             self._sift_up(len(self.heap) - 1)
         else:
             # If incoming record beats root (weakest survivor):
-            if comes_before(record, self.heap[0], self.metrics, self.band_only):
+            if comes_before(record, self.heap[0], self.metrics, self.band_only, self.rule):
                 self.heap[0] = record
                 if self.metrics is not None:
                     self.metrics.moves += 1
@@ -93,7 +94,7 @@ class MinHeapTopK:
         return result
 
 
-def top_k_min_heap(arr, k, metrics=None, band_only=False):
+def top_k_min_heap(arr, k, metrics=None, band_only=False, rule="standard"):
     """Selects top K elements using a size-K Min-Heap."""
     if k <= 0 or len(arr) == 0:
         return []
@@ -102,26 +103,26 @@ def top_k_min_heap(arr, k, metrics=None, band_only=False):
     if metrics is not None:
         metrics.peak_extra_memory = max(metrics.peak_extra_memory, k)
 
-    h = MinHeapTopK(k, metrics, band_only)
+    h = MinHeapTopK(k, metrics, band_only, rule)
     for record in arr:
         h.insert(record)
     return h.get_top_k_sorted()
 
 
-def _binary_search_pos(buf, target, metrics, band_only):
+def _binary_search_pos(buf, target, metrics, band_only, rule="standard"):
     """Finds insertion position for target in sorted buf."""
     low = 0
     high = len(buf)
     while low < high:
         mid = (low + high) // 2
-        if comes_before(target, buf[mid], metrics, band_only):
+        if comes_before(target, buf[mid], metrics, band_only, rule):
             high = mid
         else:
             low = mid + 1
     return low
 
 
-def top_k_bounded_buffer(arr, k, metrics=None, band_only=False):
+def top_k_bounded_buffer(arr, k, metrics=None, band_only=False, rule="standard"):
     """Selects top K elements using a bounded sorted list of capacity K."""
     if k <= 0 or len(arr) == 0:
         return []
@@ -133,14 +134,14 @@ def top_k_bounded_buffer(arr, k, metrics=None, band_only=False):
     buf = []
     for record in arr:
         if len(buf) < k:
-            pos = _binary_search_pos(buf, record, metrics, band_only)
+            pos = _binary_search_pos(buf, record, metrics, band_only, rule)
             buf.insert(pos, record)
             if metrics is not None:
                 metrics.moves += (len(buf) - pos)
         else:
             # Fast rejection test: compare with weakest item buf[-1]
-            if comes_before(record, buf[-1], metrics, band_only):
-                pos = _binary_search_pos(buf[:-1], record, metrics, band_only)
+            if comes_before(record, buf[-1], metrics, band_only, rule):
+                pos = _binary_search_pos(buf[:-1], record, metrics, band_only, rule)
                 buf.pop()
                 buf.insert(pos, record)
                 if metrics is not None:

@@ -199,16 +199,18 @@ Write concise, engineering-grade recommendations for the platform lead covering 
 
 ### Phase 7: Change Request & Optional Console (Problem G & Bonus — 9 Marks)
 
-- [ ] **Problem G: Change Request (4 Marks)**:
-  - [ ] Monitor portal 48 hours before deadline for Platform Lead change prompt.
-  - [ ] Re-run affected benchmarks under updated constraints.
-  - [ ] Draft short report addendum: identify what changed, valid vs. invalid prior conclusions, and updated data.
-- [ ] **Bonus: Analyst Console (Optional — 5 Marks)**:
-  - [ ] Build lightweight UI (Streamlit, Flask/FastAPI, or Vanilla Web Interface).
-  - [ ] Interactive controls: select sorting algorithm, adjust $K$ slider.
-  - [ ] Interactive display: table of top $K$ transactions (`band`, `Amount`, `Time`, `txn_id`).
-  - [ ] Performance metrics display: elapsed execution time and total key comparisons.
-  - [ ] Include 1-paragraph summary in report and prepare for viva demo.
+- [x] **Problem G: Change Request (4 Marks)**:
+  - [x] Formulate and simulate Platform Lead change prompts (CR-A: Freshest First $\text{Time} \downarrow$; CR-B: Continuous Risk $\text{risk} \downarrow$).
+  - [x] Re-run affected benchmarks across $n \in \{1\text{k}, 10\text{k}, 100\text{k}, 284.8\text{k}\}$ under updated constraints.
+  - [x] Draft formal report addendum (`reports/problem_g_change_request.md`): what changed, valid vs. invalid prior conclusions, and fresh measurements.
+  - [x] Generate comparative figures: `plot_g1_fraud_recall_comparison.png` and `plot_g2_runtime_invariance.png`.
+- [x] **Bonus: Analyst Console (Optional — 5 Marks)**:
+  - [x] Build lightweight zero-dependency UI (`console.py` on `http://127.0.0.1:8050` using standard library only).
+  - [x] Interactive controls: algorithm selector, condition selector (C1–C6), sample size ($n$), $K$ slider ($5$ to $300$), and Problem G rule toggle.
+  - [x] Interactive display: live table of top $K$ transactions with color-coded risk bands and fraud alert badges.
+  - [x] Performance metrics display: elapsed execution time, key comparisons, element moves, auxiliary memory, and fraud recall %.
+  - [x] Implement automated test suite (`tests/test_console.py` — 4 passed).
+  - [x] Document 1-paragraph summary and viva demonstration instructions in report.
 
 ---
 

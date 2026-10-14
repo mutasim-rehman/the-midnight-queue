@@ -6,7 +6,7 @@ Preallocates a single auxiliary buffer for high performance and stability.
 from src.triage_record import comes_before
 
 
-def merge_sort(arr, metrics=None, band_only=False):
+def merge_sort(arr, metrics=None, band_only=False, rule="standard"):
     """
     Sorts arr using Divide-and-Conquer Merge Sort.
     
@@ -34,7 +34,7 @@ def merge_sort(arr, metrics=None, band_only=False):
 
         while i <= mid and j <= right:
             # For stability on equal keys: prefer arr[i] from left subarray
-            if comes_before(arr[j], arr[i], metrics, band_only):
+            if comes_before(arr[j], arr[i], metrics, band_only, rule):
                 aux[k] = arr[j]
                 j += 1
             else:

@@ -10,24 +10,24 @@ Hardening mechanisms:
 from src.triage_record import comes_before
 
 
-def _median_of_three(arr, low, high, metrics=None, band_only=False):
+def _median_of_three(arr, low, high, metrics=None, band_only=False, rule="standard"):
     """
     Selects median among arr[low], arr[mid], arr[high]
     and places it at index low to serve as the pivot.
     """
     mid = low + (high - low) // 2
 
-    if comes_before(arr[mid], arr[low], metrics, band_only):
+    if comes_before(arr[mid], arr[low], metrics, band_only, rule):
         arr[low], arr[mid] = arr[mid], arr[low]
         if metrics is not None:
             metrics.moves += 2
 
-    if comes_before(arr[high], arr[low], metrics, band_only):
+    if comes_before(arr[high], arr[low], metrics, band_only, rule):
         arr[low], arr[high] = arr[high], arr[low]
         if metrics is not None:
             metrics.moves += 2
 
-    if comes_before(arr[high], arr[mid], metrics, band_only):
+    if comes_before(arr[high], arr[mid], metrics, band_only, rule):
         arr[mid], arr[high] = arr[high], arr[mid]
         if metrics is not None:
             metrics.moves += 2
@@ -41,7 +41,7 @@ def _median_of_three(arr, low, high, metrics=None, band_only=False):
     return low
 
 
-def quick_sort_hardened(arr, metrics=None, band_only=False):
+def quick_sort_hardened(arr, metrics=None, band_only=False, rule="standard"):
     """
     Hardened QuickSort with Median-of-Three, 3-Way Partitioning, and Tail-Recursion Loop.
     
@@ -58,7 +58,7 @@ def quick_sort_hardened(arr, metrics=None, band_only=False):
     def _sort(low, high):
         while low < high:
             if high - low >= 2:
-                _median_of_three(arr, low, high, metrics, band_only)
+                _median_of_three(arr, low, high, metrics, band_only, rule)
 
             pivot = arr[low]
             lt = low
@@ -67,13 +67,13 @@ def quick_sort_hardened(arr, metrics=None, band_only=False):
 
             # 3-Way Dutch National Flag partitioning
             while i <= gt:
-                if comes_before(arr[i], pivot, metrics, band_only):
+                if comes_before(arr[i], pivot, metrics, band_only, rule):
                     arr[lt], arr[i] = arr[i], arr[lt]
                     if metrics is not None:
                         metrics.moves += 2
                     lt += 1
                     i += 1
-                elif comes_before(pivot, arr[i], metrics, band_only):
+                elif comes_before(pivot, arr[i], metrics, band_only, rule):
                     arr[i], arr[gt] = arr[gt], arr[i]
                     if metrics is not None:
                         metrics.moves += 2

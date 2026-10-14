@@ -5,7 +5,7 @@ Uses simple, standard Python with zero external libraries.
 from src.triage_record import comes_before
 
 
-def heap_sort(arr, metrics=None, band_only=False):
+def heap_sort(arr, metrics=None, band_only=False, rule="standard"):
     """
     In-Place Heap Sort.
     
@@ -33,11 +33,11 @@ def heap_sort(arr, metrics=None, band_only=False):
 
             # Child with lowest triage priority (parent comes before child)
             if left < size:
-                if comes_before(arr[worst_idx], arr[left], metrics, band_only):
+                if comes_before(arr[worst_idx], arr[left], metrics, band_only, rule):
                     worst_idx = left
 
             if right < size:
-                if comes_before(arr[worst_idx], arr[right], metrics, band_only):
+                if comes_before(arr[worst_idx], arr[right], metrics, band_only, rule):
                     worst_idx = right
 
             if worst_idx != current:
