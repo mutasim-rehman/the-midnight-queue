@@ -40,23 +40,21 @@ def load_triage_records(csv_path: Optional[Path] = None) -> List[TriageRecord]:
     df = pd.read_csv(csv_path)
 
     # 1. txn_id (1-indexed row number)
-    txn_ids = np.arange(1, len(df) + 1, dtype=np.int64)
+    n = len(df)
+    txn_ids = np.arange(1, n + 1, dtype=np.int64)
 
-    # 2. Standardised features z_1 to z_28
-    v_cols = [f"V{i}" for i in range(1, 29)]
-    v_matrix = df[v_cols].values
-    means = np.mean(v_matrix, axis=0)
-    stds = np.std(v_matrix, axis=0, ddof=0)  # full file std
+    # 2. Standardised features z_1 to z_28 and Risk Score (column-by-column to minimize memory)
+    risk_scores = np.zeros(n, dtype=np.float64)
+    for i in range(1, 29):
+        col = df[f"V{i}"].values
+        m = np.mean(col)
+        s = np.std(col, ddof=0)
+        if s == 0:
+            s = 1.0
+        z = (col - m) / s
+        risk_scores += z * z
 
-    # Avoid zero division
-    stds[stds == 0] = 1.0
-    z_matrix = (v_matrix - means) / stds
-
-    # 3. Risk score: sum of squared z_i
-    risk_scores = np.sum(z_matrix ** 2, axis=1)
-
-    # 4. Risk band: min(9, max(0, floor(log2(risk))))
-    # Protect against non-positive risk
+    # 3. Risk band: min(9, max(0, floor(log2(risk))))
     log2_risk = np.floor(np.log2(np.maximum(risk_scores, 1e-12))).astype(int)
     bands = np.clip(log2_risk, 0, 9)
 

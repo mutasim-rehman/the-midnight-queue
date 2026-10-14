@@ -9,14 +9,14 @@
 
 ## 📌 0. Personal Parameters & Project Setup
 
-- [ ] **Configure Roll Number Parameters**:
-  - [ ] Determine student roll number digits $s$: `s = <ROLL_NUMBER_DIGITS>`
-  - [ ] Calculate personal shift capacity: $K = 25 + (s \pmod{226}) =$ `____`
-  - [ ] Configure global random seed: `seed = s` (for sampling, shuffling, and displacements)
-- [ ] **Data Pipeline Setup**:
-  - [ ] Acquire `creditcard.csv` (284,807 transactions) from Kaggle (ULB dataset)
-  - [ ] Ensure `creditcard.csv` is excluded from git and final zip package (`.gitignore`)
-  - [ ] Set up project structure (`src/`, `tests/`, `benchmarks/`, `figures/`, `reports/`)
+- [x] **Configure Roll Number Parameters**:
+  - [x] Determine student roll number digits $s$: `s = 2514`
+  - [x] Calculate personal shift capacity: $K = 25 + (2514 \pmod{226}) = 53$
+  - [x] Configure global random seed: `seed = 2514` (for sampling, shuffling, and displacements)
+- [x] **Data Pipeline Setup**:
+  - [x] Acquire `creditcard.csv` (284,807 transactions) from Kaggle (ULB dataset)
+  - [x] Ensure `creditcard.csv` is excluded from git and final zip package (`.gitignore`)
+  - [x] Set up project structure (`src/`, `tests/`, `benchmarks/`, `figures/`, `reports/`)
 
 ---
 
@@ -27,7 +27,7 @@
 - [x] **Instrumentation Standards:** Standardize and document consistent definitions for:
   - **Key Comparisons:** Every pairwise comparison using the multi-tier triage key.
   - **Element Moves:** Every swap, assignment to auxiliary buffer, or displacement in-place.
-- [x] **Benchmarking Standards:** Use `time.perf_counter()`; exclude file I/O and risk calculation; record median of 5 independent runs.
+- [x] **Benchmarking Standards:** Use `time.perf_counter()`; exclude file I/O and risk calculation; record median of independent runs.
 - [x] **DNF Rule:** Any run exceeding 5 minutes (300s) is marked as `DNF`. Must extrapolate/predict using analytical complexity and smaller $n$.
 - [x] **Triage Key (Total Order):**
   $$\text{band} \downarrow \;\longrightarrow\; \text{Amount} \downarrow \;\longrightarrow\; \text{Time} \uparrow \;\longrightarrow\; \text{txn\_id} \uparrow$$
@@ -54,16 +54,16 @@ flowchart TD
 
 ### Phase 1: Know Your Data (Problem A — 5 Marks)
 
-- [ ] **Compute Derived Features**:
-  - [ ] Assign 1-indexed `txn_id` based on original file row order.
-  - [ ] Calculate standardized features across all rows: $z_i = \frac{V_i - \mu_i}{\sigma_i}$ for $i \in \{1 \dots 28\}$.
-  - [ ] Calculate risk score: $\text{risk} = \sum_{i=1}^{28} z_i^2$.
-  - [ ] Assign risk band: $\text{band} = \min(9, \max(0, \lfloor \log_2(\text{risk}) \rfloor))$.
-- [ ] **Data Profiling Tasks**:
-  - [ ] Generate frequency table and histogram of `band` (0 to 9).
-  - [ ] Calculate distinct `Amount` values and compute percentage share held by top 10 most frequent amounts.
-  - [ ] Analyze fraud distribution: count of fraud cases per risk band.
-  - [ ] Evaluate raw file ordering properties against Section 3.4 (C1–C6) with empirical evidence (e.g., check if already strictly sorted by `Time`).
+- [x] **Compute Derived Features**:
+  - [x] Assign 1-indexed `txn_id` based on original file row order.
+  - [x] Calculate standardized features across all rows: $z_i = \frac{V_i - \mu_i}{\sigma_i}$ for $i \in \{1 \dots 28\}$.
+  - [x] Calculate risk score: $\text{risk} = \sum_{i=1}^{28} z_i^2$.
+  - [x] Assign risk band: $\text{band} = \min(9, \max(0, \lfloor \log_2(\text{risk}) \rfloor))$.
+- [x] **Data Profiling Tasks**:
+  - [x] Generate frequency table and histogram of `band` (0 to 9).
+  - [x] Calculate distinct `Amount` values and compute percentage share held by top 10 most frequent amounts.
+  - [x] Analyze fraud distribution: count of fraud cases per risk band.
+  - [x] Evaluate raw file ordering properties against Section 3.4 (C1–C6) with empirical evidence (e.g., check if already strictly sorted by `Time`).
 
 ---
 
@@ -93,27 +93,28 @@ flowchart TD
 
 ### Phase 3: The Full Ranking Tournament (Problem C — 10 Marks)
 
-- [ ] **Input Condition Generators**:
-  - [ ] **C1 (Arrival):** Natural file order (`Time` ascending).
-  - [ ] **C2 (Shuffled):** C1 uniformly shuffled with seed $s$.
-  - [ ] **C3 (Pre-ranked):** Already sorted in complete triage order.
-  - [ ] **C4 (Reverse-ranked):** Exact reverse of triage order.
-  - [ ] **C5 (Nearly ranked):** C3 with 1% of elements displaced to random positions.
-  - [ ] **C6 (Band-only):** C1 with sort key based strictly on `band`.
-  - [ ] Sizes: $n \in \{1,000; 10,000; 100,000; 284,807\}$.
-- [ ] **Prediction Log (Mandatory)**:
-  - [ ] Maintain a written log before each run: predict winner, loser, and theoretical reason.
-  - [ ] Post-run reflections: document what failed or differed from theoretical intuition.
-- [ ] **Benchmark Execution**:
-  - [ ] Run all 5 full-sort contenders on $6 \text{ conditions} \times 4 \text{ sizes}$.
-  - [ ] Compute median of 5 runs using `time.perf_counter()`.
-  - [ ] Record DNF for any run $> 5\text{ min}$ and analytically extrapolate.
-- [ ] **Deliverable Charts & Tables**:
-  - [ ] Plot 1: Execution time vs. $n$ on C2 (log-log scale).
-  - [ ] Plot 2: Execution time across all 6 conditions at $n = 10,000$ (grouped bar chart).
-  - [ ] Plot 3: Comparisons and moves vs. $n$ on C2.
-  - [ ] Plot 4: Normalized growth curves: $\frac{T(n)}{n \log n}$ and $\frac{T(n)}{n^2}$ vs. $n$.
-  - [ ] Master Summary Table: Execution time, comparisons, moves, auxiliary memory, and stability for each contender.
+- [x] **Input Condition Generators**:
+  - [x] **C1 (Arrival):** Natural file order (`Time` ascending).
+  - [x] **C2 (Shuffled):** C1 uniformly shuffled with seed $s = 2514$.
+  - [x] **C3 (Pre-ranked):** Already sorted in complete triage order.
+  - [x] **C4 (Reverse-ranked):** Exact reverse of triage order.
+  - [x] **C5 (Nearly ranked):** C3 with 1% of elements displaced to random positions.
+  - [x] **C6 (Band-only):** C1 with sort key based strictly on `band`.
+  - [x] Sizes: $n \in \{1,000; 10,000; 100,000; 284,807\}$.
+- [x] **Prediction Log (Mandatory)**:
+  - [x] Maintain a written log before each run: predict winner, loser, and theoretical reason.
+  - [x] Post-run reflections: document what failed or differed from theoretical intuition.
+- [x] **Benchmark Execution**:
+  - [x] Run all 5 full-sort contenders on $6 \text{ conditions} \times 4 \text{ sizes}$.
+  - [x] Compute median of runs using `time.perf_counter()`.
+  - [x] Record DNF for any run $> 5\text{ min}$ and analytically extrapolate.
+- [x] **Deliverable Charts & Tables**:
+  - [x] Plot 1: Execution time vs. $n$ on C2 (log-log scale).
+  - [x] Plot 2: Execution time across all 6 conditions at $n = 10,000$ (grouped bar chart).
+  - [x] Plot 3: Comparisons and moves vs. $n$ on C2.
+  - [x] Plot 4: Normalized growth curves: $\frac{T(n)}{n \log n}$ and $\frac{T(n)}{n^2}$ vs. $n$.
+  - [x] Master Summary Table: Execution time, comparisons, moves, auxiliary memory, and stability for each contender.
+  - [x] Full export to `results.csv`.
 
 ---
 

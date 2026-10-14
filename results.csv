@@ -1,0 +1,121 @@
+algorithm,condition,n,time_sec,comparisons,moves,aux_memory,space_complexity,is_stable,status,extrapolated,notes
+Insertion Sort,C1,1000,0.08250680000492139,251666,252670,0,O(1),True,OK,False,Median of 5 runs
+Merge Sort,C1,1000,0.005979100002150517,8681,19952,1000,O(n),True,OK,False,Median of 5 runs
+Naive QuickSort,C1,1000,0.003471500000159722,11211,8848,0,O(n) worst,False,OK,False,Median of 5 runs
+Hardened QuickSort,C1,1000,0.005796199999167584,16324,21548,0,O(log n),False,OK,False,Median of 5 runs
+Heap Sort,C1,1000,0.005941499999607913,16835,18084,0,O(1),False,OK,False,Median of 5 runs
+Insertion Sort,C2,1000,0.08419909999793163,247908,248911,0,O(1),True,OK,False,Median of 5 runs
+Merge Sort,C2,1000,0.005314399997587316,8706,19952,1000,O(n),True,OK,False,Median of 5 runs
+Naive QuickSort,C2,1000,0.003318700000818353,10218,8918,0,O(n) worst,False,OK,False,Median of 5 runs
+Hardened QuickSort,C2,1000,0.005829599998833146,16129,21908,0,O(log n),False,OK,False,Median of 5 runs
+Heap Sort,C2,1000,0.00624239999888232,16825,18174,0,O(1),False,OK,False,Median of 5 runs
+Insertion Sort,C3,1000,0.00037149999843677506,999,1998,0,O(1),True,OK,False,Median of 5 runs
+Merge Sort,C3,1000,0.0044753999973181635,5044,19952,1000,O(n),True,OK,False,Median of 5 runs
+Naive QuickSort,C3,1000,0.14987720000499394,499500,0,0,O(n) worst,False,OK,False,Median of 5 runs
+Hardened QuickSort,C3,1000,0.01787999999942258,46159,49818,0,O(log n),False,OK,False,Median of 5 runs
+Heap Sort,C3,1000,0.008556499997212086,17583,19416,0,O(1),False,OK,False,Median of 5 runs
+Insertion Sort,C4,1000,0.18786910000198986,499500,501498,0,O(1),True,OK,False,Median of 5 runs
+Merge Sort,C4,1000,0.004090499998710584,4932,19952,1000,O(n),True,OK,False,Median of 5 runs
+Naive QuickSort,C4,1000,0.11415760000090813,499500,1000,0,O(n) worst,False,OK,False,Median of 5 runs
+Hardened QuickSort,C4,1000,0.009938200004398823,33443,37342,0,O(log n),False,OK,False,Median of 5 runs
+Heap Sort,C4,1000,0.005711800004064571,15965,16632,0,O(1),False,OK,False,Median of 5 runs
+Insertion Sort,C5,1000,0.0015712000022176653,3828,4827,0,O(1),True,OK,False,Median of 5 runs
+Merge Sort,C5,1000,0.004608699993696064,5978,19952,1000,O(n),True,OK,False,Median of 5 runs
+Naive QuickSort,C5,1000,0.047654600006353576,207043,2926,0,O(n) worst,False,OK,False,Median of 5 runs
+Hardened QuickSort,C5,1000,0.00719799999933457,24957,28964,0,O(log n),False,OK,False,Median of 5 runs
+Heap Sort,C5,1000,0.006441199999244418,17546,19386,0,O(1),False,OK,False,Median of 5 runs
+Insertion Sort,C6,1000,0.04937629999767523,174944,175945,0,O(1),True,OK,False,Median of 5 runs
+Merge Sort,C6,1000,0.0057164000027114525,8343,19952,1000,O(n),True,OK,False,Median of 5 runs
+Naive QuickSort,C6,1000,0.025233699998352677,158717,4248,0,O(n) worst,False,OK,False,Median of 5 runs
+Hardened QuickSort,C6,1000,0.0007010999979684129,3319,1562,0,O(log n),False,OK,False,Median of 5 runs
+Heap Sort,C6,1000,0.0040240999951492995,13896,14240,0,O(1),False,OK,False,Median of 5 runs
+Insertion Sort,C1,10000,11.454559400001017,24985805,24995813,0,O(1),True,OK,False,Median of 3 runs
+Merge Sort,C1,10000,0.08471530000679195,120237,267232,10000,O(n),True,OK,False,Median of 5 runs
+Naive QuickSort,C1,10000,0.058981399997719564,160401,137738,0,O(n) worst,False,OK,False,Median of 5 runs
+Hardened QuickSort,C1,10000,0.08902849999867612,222983,296906,0,O(log n),False,OK,False,Median of 5 runs
+Heap Sort,C1,10000,0.09703159999480704,235462,248050,0,O(1),False,OK,False,Median of 5 runs
+Insertion Sort,C2,10000,10.815230399995926,24983274,24993276,0,O(1),True,OK,False,Median of 3 runs
+Merge Sort,C2,10000,0.08472400000027847,120375,267232,10000,O(n),True,OK,False,Median of 5 runs
+Naive QuickSort,C2,10000,0.058948900004907046,152280,144092,0,O(n) worst,False,OK,False,Median of 5 runs
+Hardened QuickSort,C2,10000,0.08027049999509472,208410,280742,0,O(log n),False,OK,False,Median of 5 runs
+Heap Sort,C2,10000,0.10301980000076583,235487,248472,0,O(1),False,OK,False,Median of 5 runs
+Insertion Sort,C3,10000,0.0063084999928832985,9999,19998,0,O(1),True,OK,False,Median of 3 runs
+Merge Sort,C3,10000,0.06396809999569086,69008,267232,10000,O(n),True,OK,False,Median of 5 runs
+Naive QuickSort,C3,10000,15.100288399997225,49995000,0,0,O(n) worst,False,OK,False,Median of 3 runs
+Hardened QuickSort,C3,10000,0.43472819999442436,1416366,1461276,0,O(log n),False,OK,False,Median of 5 runs
+Heap Sort,C3,10000,0.09398470000451198,244460,263912,0,O(1),False,OK,False,Median of 5 runs
+Insertion Sort,C4,10000,21.3614419000005,49995000,50014998,0,O(1),True,OK,False,Median of 3 runs
+Merge Sort,C4,10000,0.06423470000299858,64608,267232,10000,O(n),True,OK,False,Median of 5 runs
+Naive QuickSort,C4,10000,15.016115899998113,49995000,10000,0,O(n) worst,False,OK,False,Median of 3 runs
+Hardened QuickSort,C4,10000,0.30170459999499144,1015490,1062616,0,O(log n),False,OK,False,Median of 5 runs
+Heap Sort,C4,10000,0.08553869999741437,226682,233392,0,O(1),False,OK,False,Median of 5 runs
+Insertion Sort,C5,10000,0.1360382999991998,334590,344589,0,O(1),True,OK,False,Median of 3 runs
+Merge Sort,C5,10000,0.07194080000044778,96194,267232,10000,O(n),True,OK,False,Median of 5 runs
+Naive QuickSort,C5,10000,0.6259309000015492,2465127,59610,0,O(n) worst,False,OK,False,Median of 5 runs
+Hardened QuickSort,C5,10000,0.14630740000575315,425642,481476,0,O(log n),False,OK,False,Median of 5 runs
+Heap Sort,C5,10000,0.09666380000271602,243321,261850,0,O(1),False,OK,False,Median of 5 runs
+Insertion Sort,C6,10000,5.915908999995736,17265437,17275439,0,O(1),True,OK,False,Median of 3 runs
+Merge Sort,C6,10000,0.061662000000069384,115444,267232,10000,O(n),True,OK,False,Median of 5 runs
+Naive QuickSort,C6,10000,2.6924514999991516,15894222,42814,0,O(n) worst,False,OK,False,Median of 3 runs
+Hardened QuickSort,C6,10000,0.009847500004980247,43041,27708,0,O(log n),False,OK,False,Median of 5 runs
+Heap Sort,C6,10000,0.05772580000484595,190802,193492,0,O(1),False,OK,False,Median of 5 runs
+Insertion Sort,C1,100000,1145.4559400001017,2498580500,2499581300,0,O(1),True,DNF,True,O(n^2) quadratic fit from n=10000: T(n) = 11.4546 * (n/10000)^2
+Merge Sort,C1,100000,1.136601199999859,1532418,3337856,100000,O(n),True,OK,False,Median of 3 runs
+Naive QuickSort,C1,100000,0.8892780000023777,2026258,1746322,0,O(n) worst,False,OK,False,Median of 3 runs
+Hardened QuickSort,C1,100000,1.1514967999974033,2710432,3602428,0,O(log n),False,OK,False,Median of 3 runs
+Heap Sort,C1,100000,1.4182632000010926,3019241,3144258,0,O(1),False,OK,False,Median of 3 runs
+Insertion Sort,C2,100000,1081.5230399995926,2498327400,2499327600,0,O(1),True,DNF,True,O(n^2) quadratic fit from n=10000: T(n) = 10.8152 * (n/10000)^2
+Merge Sort,C2,100000,1.0834651999975904,1536271,3337856,100000,O(n),True,OK,False,Median of 3 runs
+Naive QuickSort,C2,100000,0.8986858000062057,1960534,1736598,0,O(n) worst,False,OK,False,Median of 3 runs
+Hardened QuickSort,C2,100000,1.1769682000012835,2746360,3672998,0,O(log n),False,OK,False,Median of 3 runs
+Heap Sort,C2,100000,1.4665912999989814,3019444,3149442,0,O(1),False,OK,False,Median of 3 runs
+Insertion Sort,C3,100000,0.0711585000026389,99999,199998,0,O(1),True,OK,False,Median of 3 runs
+Merge Sort,C3,100000,0.8820274000026984,853904,3337856,100000,O(n),True,OK,False,Median of 3 runs
+Naive QuickSort,C3,100000,1510.0288399997225,4999500000,0,0,O(n) worst,False,DNF,True,O(n^2) quadratic fit from n=10000: T(n) = 15.1003 * (n/10000)^2
+Hardened QuickSort,C3,100000,14.95399080000061,43725644,44228150,0,O(log n),False,OK,False,Median of 3 runs
+Heap Sort,C3,100000,1.161287299997639,3112517,3301708,0,O(1),False,OK,False,Median of 3 runs
+Insertion Sort,C4,100000,2136.14419000005,4999500000,5001499800,0,O(1),True,DNF,True,O(n^2) quadratic fit from n=10000: T(n) = 21.3614 * (n/10000)^2
+Merge Sort,C4,100000,0.8409114999958547,815024,3337856,100000,O(n),True,OK,False,Median of 3 runs
+Naive QuickSort,C4,100000,1501.6115899998113,4999500000,1000000,0,O(n) worst,False,DNF,True,O(n^2) quadratic fit from n=10000: T(n) = 15.0161 * (n/10000)^2
+Hardened QuickSort,C4,100000,10.539520300000731,31154401,31686358,0,O(log n),False,OK,False,Median of 3 runs
+Heap Sort,C4,100000,1.1650020000015502,2926640,2994868,0,O(1),False,OK,False,Median of 3 runs
+Insertion Sort,C5,100000,14.475526999995054,33524453,33624452,0,O(1),True,OK,False,Median of 3 runs
+Merge Sort,C5,100000,1.0005848000000697,1295501,3337856,100000,O(n),True,OK,False,Median of 3 runs
+Naive QuickSort,C5,100000,5.415899999999965,18596950,696572,0,O(n) worst,False,OK,False,Median of 3 runs
+Hardened QuickSort,C5,100000,1.5098750999968615,4001501,5068032,0,O(log n),False,OK,False,Median of 3 runs
+Heap Sort,C5,100000,1.201206199999433,3003252,3178064,0,O(1),False,OK,False,Median of 3 runs
+Insertion Sort,C6,100000,591.5908999995736,1726543700,1727543900,0,O(1),True,DNF,True,O(n^2) quadratic fit from n=10000: T(n) = 5.9159 * (n/10000)^2
+Merge Sort,C6,100000,0.9520039999988512,1466104,3337856,100000,O(n),True,OK,False,Median of 3 runs
+Naive QuickSort,C6,100000,269.24514999991516,1589422200,4281400,0,O(n) worst,False,DNF,True,O(n^2) quadratic fit from n=10000: T(n) = 2.6925 * (n/10000)^2
+Hardened QuickSort,C6,100000,0.10125239999615587,367349,227052,0,O(log n),False,OK,False,Median of 3 runs
+Heap Sort,C6,100000,0.8491292000035173,2431802,2456726,0,O(1),False,OK,False,Median of 3 runs
+Insertion Sort,C1,284807,9291.368978563714,20267242534,20275360526,0,O(1),True,DNF,True,O(n^2) quadratic fit from n=10000: T(n) = 11.4546 * (n/10000)^2
+Merge Sort,C1,284807,3.639556200003426,4793437,10343704,284807,O(n),True,OK,False,Median of 1 runs
+Naive QuickSort,C1,284807,2.888958100003947,6601882,6141342,0,O(n) worst,False,OK,False,Median of 1 runs
+Hardened QuickSort,C1,284807,3.605688999996346,8417061,11363216,0,O(log n),False,OK,False,Median of 1 runs
+Heap Sort,C1,284807,4.707596100000956,9443022,9799558,0,O(1),False,OK,False,Median of 1 runs
+Insertion Sort,C2,284807,8772.777085998827,20265189512,20273302637,0,O(1),True,DNF,True,O(n^2) quadratic fit from n=10000: T(n) = 10.8152 * (n/10000)^2
+Merge Sort,C2,284807,3.775467400002526,4804402,10343704,284807,O(n),True,OK,False,Median of 1 runs
+Naive QuickSort,C2,284807,2.761039199998777,6180810,6116374,0,O(n) worst,False,OK,False,Median of 1 runs
+Hardened QuickSort,C2,284807,3.7539556000047014,8778624,11612318,0,O(log n),False,OK,False,Median of 1 runs
+Heap Sort,C2,284807,4.534232600002724,9448826,9819702,0,O(1),False,OK,False,Median of 1 runs
+Insertion Sort,C3,284807,0.2177836000046227,284806,569612,0,O(1),True,OK,False,Median of 1 runs
+Merge Sort,C3,284807,2.877646300003107,2630304,10343704,284807,O(n),True,OK,False,Median of 1 runs
+Naive QuickSort,C3,284807,12248.603050335334,40553457873,0,0,O(n) worst,False,DNF,True,O(n^2) quadratic fit from n=10000: T(n) = 15.1003 * (n/10000)^2
+Hardened QuickSort,C3,284807,73.09419929999422,208453384,209957830,0,O(log n),False,OK,False,Median of 1 runs
+Heap Sort,C3,284807,3.5265698000002885,9704825,10225112,0,O(1),False,OK,False,Median of 1 runs
+Insertion Sort,C4,284807,17327.339417964708,40553457873,40569679256,0,O(1),True,DNF,True,O(n^2) quadratic fit from n=10000: T(n) = 21.3614 * (n/10000)^2
+Merge Sort,C4,284807,2.825453400000697,2541548,10343704,284807,O(n),True,OK,False,Median of 1 runs
+Naive QuickSort,C4,284807,12180.32650402489,40553457873,8111502,0,O(n) worst,False,DNF,True,O(n^2) quadratic fit from n=10000: T(n) = 15.0161 * (n/10000)^2
+Hardened QuickSort,C4,284807,62.775181500001054,178536013,180087790,0,O(log n),False,OK,False,Median of 1 runs
+Heap Sort,C4,284807,3.50984829999652,9210463,9403878,0,O(1),False,OK,False,Median of 1 runs
+Insertion Sort,C5,284807,115.15912229999958,263048485,263333291,0,O(1),True,OK,False,Median of 1 runs
+Merge Sort,C5,284807,3.2362617000035243,4101567,10343704,284807,O(n),True,OK,False,Median of 1 runs
+Naive QuickSort,C5,284807,31.637268899998162,87122203,2363398,0,O(n) worst,False,OK,False,Median of 1 runs
+Hardened QuickSort,C5,284807,6.166490600000543,16112658,18393424,0,O(log n),False,OK,False,Median of 1 runs
+Heap Sort,C5,284807,3.7029792000030284,9683455,10208978,0,O(1),False,OK,False,Median of 1 runs
+Insertion Sort,C6,284807,4798.691197372584,14004863927,14012977052,0,O(1),True,DNF,True,O(n^2) quadratic fit from n=10000: T(n) = 5.9159 * (n/10000)^2
+Merge Sort,C6,284807,2.4875439000024926,4576060,10343704,284807,O(n),True,OK,False,Median of 1 runs
+Naive QuickSort,C6,284807,2183.9827678904207,12892602506,34728587,0,O(n) worst,False,DNF,True,O(n^2) quadratic fit from n=10000: T(n) = 2.6925 * (n/10000)^2
+Hardened QuickSort,C6,284807,0.19119420000060927,833832,480540,0,O(log n),False,OK,False,Median of 1 runs
+Heap Sort,C6,284807,2.3306558999975096,7389529,7452190,0,O(1),False,OK,False,Median of 1 runs
