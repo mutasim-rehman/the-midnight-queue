@@ -3,4 +3,5 @@ mlg-ulb/
 .env
 build_eda_notebook.py
 build_tournament_notebook.py
+build_stage_4_notebook.py
 __pycache__/

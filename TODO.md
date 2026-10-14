@@ -120,30 +120,30 @@ flowchart TD
 
 ### Phase 4: Shift Queue & Streaming Workloads (Problems D & E — 14 Marks)
 
-- [ ] **Problem D: The Shift Queue (Top-$K$ Analysis — 7 Marks)**:
-  - [ ] Contenders to compare:
+- [x] **Problem D: The Shift Queue (Top-$K$ Analysis — 7 Marks)**:
+  - [x] Contenders to compare:
     - (a) Full Sort $\to$ take first $K$
     - (b) Size-$K$ Min-Heap
     - (c) Bounded Insertion Buffer
-  - [ ] Benchmark configurations:
-    - $K \in \{10, 50, K_{\text{personal}}, 500, 5000, n/10\}$
+  - [x] Benchmark configurations:
+    - $K \in \{10, 50, K_{\text{personal}}=53, 500, 5000, n/10\}$
     - $n \in \{100,000; 284,807\}$
     - Conditions: C1 and C2
-  - [ ] Analysis:
-    - [ ] Determine empirical crossover points: where does each method stop being optimal?
-    - [ ] Plot fraction of all frauds captured in top $K$ as $K$ increases.
-    - [ ] Find smallest $K$ that captures $\ge 50\%$ of all frauds under this scoring rule.
-    - [ ] Calculate the computational cost to produce that queue across all 3 methods.
-- [ ] **Problem E: The Live Feed (Continuous Ranking — 7 Marks)**:
-  - [ ] Split dataset chronologically into:
+  - [x] Analysis:
+    - [x] Determine empirical crossover points: where does each method stop being optimal?
+    - [x] Plot fraction of all frauds captured in top $K$ as $K$ increases.
+    - [x] Find smallest $K$ that captures $\ge 50\%$ of all frauds under this scoring rule ($K = 2{,}068$).
+    - [x] Calculate the computational cost to produce that queue across all 3 methods.
+- [x] **Problem E: The Live Feed (Continuous Ranking — 7 Marks)**:
+  - [x] Split dataset chronologically into:
     - 1-hour windows (48 windows)
     - 10-minute windows (288 windows)
-  - [ ] Evaluate 3 incremental strategies to publish top $K$ seen so far:
+  - [x] Evaluate 3 incremental strategies to publish top $K$ seen so far:
     - Strategy (a): Re-rank everything seen so far from scratch.
     - Strategy (b): Maintain a size-$K$ heap fed only by incoming window records.
     - Strategy (c): Merge Sort the new window, then merge into current top-$K$ list.
-  - [ ] Plot cumulative runtime vs. window index for 1-hour and 10-minute windows.
-  - [ ] Monitor and report peak auxiliary memory footprint for each strategy.
+  - [x] Plot cumulative runtime vs. window index for 1-hour and 10-minute windows.
+  - [x] Monitor and report peak auxiliary memory footprint for each strategy.
 
 ---
 
