@@ -225,17 +225,15 @@ py console.py
 # Open your browser at http://127.0.0.1:8050
 ```
 
-### C. Re-compile the Strict 5-Page PDF Report
-```bash
-py build_pdf_report.py
-# Outputs 24i-2514-A2-A.pdf and 24i-2514-A2-B.pdf (strictly 5 pages verified)
-```
+### C. Jupyter Notebooks
+- `stage_1_eda.ipynb`: Problem A Data Profiling & Empirical Verification.
+- `stage_3_tournament.ipynb`: Problem C 30-Cell Algorithmic Tournament & Empirical Benchmarking.
+- `stage_4_shift_queue.ipynb`: Problem D Shift Queue & Problem E Live Streaming Ingestion ($K=53$).
 
-### D. Package Clean Submission Zip Archive
-```bash
-py package_submission.py
-# Produces 24i-2514-A2-A.zip (strictly excludes creditcard.csv and caches)
-```
+### D. Deliverable Reports & Artifacts
+- `24i-2514-A2-A.pdf`: Final verified 5-page PDF report.
+- `results.csv`: Empirical benchmark results for all 30 cells.
+- `reports/`: Complete theoretical proofs (M1-M8), executive recommendations, Problem G change request, and viva defense guide.
 
 ---
 

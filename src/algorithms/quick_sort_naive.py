@@ -14,12 +14,16 @@ Failure & Crash Handling:
 from src.triage_record import comes_before
 
 
-def _lomuto_partition(arr, low, high, metrics=None, band_only=False):
+def _lomuto_partition(arr, low, high, metrics=None, band_only=False, rule="standard"):
+    """
+    Standard Lomuto partition scheme (CLRS Chapter 7.1).
+    Takes the last element arr[high] as pivot and partitions arr[low..high].
+    """
     pivot = arr[high]
     i = low - 1
 
     for j in range(low, high):
-        if comes_before(arr[j], pivot, metrics, band_only):
+        if comes_before(arr[j], pivot, metrics, band_only, rule):
             i += 1
             if i != j:
                 arr[i], arr[j] = arr[j], arr[i]
@@ -34,13 +38,13 @@ def _lomuto_partition(arr, low, high, metrics=None, band_only=False):
     return i + 1
 
 
-def quick_sort_naive(arr, metrics=None, band_only=False, use_explicit_stack=True):
+def quick_sort_naive(arr, metrics=None, band_only=False, rule="standard", use_explicit_stack=True):
     """
     Naive QuickSort using Lomuto partition with last element as pivot.
     
     Time Complexity:
       - Best/Average: O(n log n)
-      - Worst: O(n^2)
+      - Worst (sorted or reverse-sorted input): O(n^2)
     Space Complexity:
       - O(n) call stack or explicit stack in worst case.
     """
@@ -52,7 +56,7 @@ def quick_sort_naive(arr, metrics=None, band_only=False, use_explicit_stack=True
         # Recursive version to demonstrate call-stack crash on large sorted data
         def _recursive_qs(low, high):
             if low < high:
-                p = _lomuto_partition(arr, low, high, metrics, band_only)
+                p = _lomuto_partition(arr, low, high, metrics, band_only, rule)
                 _recursive_qs(low, p - 1)
                 _recursive_qs(p + 1, high)
 
@@ -72,8 +76,9 @@ def quick_sort_naive(arr, metrics=None, band_only=False, use_explicit_stack=True
     while len(stack) > 0:
         low, high = stack.pop()
         if low < high:
-            p = _lomuto_partition(arr, low, high, metrics, band_only)
+            p = _lomuto_partition(arr, low, high, metrics, band_only, rule)
             stack.append((low, p - 1))
             stack.append((p + 1, high))
 
     return arr
+
