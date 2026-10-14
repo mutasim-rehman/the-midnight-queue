@@ -181,19 +181,19 @@ flowchart TD
 ### Phase 6: Executive Recommendations (Problem H — 5 Marks)
 
 Write concise, engineering-grade recommendations for the platform lead covering 3 distinct operational jobs:
-- [ ] **Job 1: Overnight Batch (Full-day batch ranking)**:
-  - [ ] Specify chosen algorithm.
-  - [ ] Defend with experimental timing/memory data and mathematical bounds.
-  - [ ] State core operating assumptions.
-  - [ ] State precise edge case or scenario where this choice breaks.
-- [ ] **Job 2: Shift Queue (Real-time selection of top $K$ alerts)**:
-  - [ ] Specify chosen algorithm/data structure.
-  - [ ] Defend with empirical crossover data and fraud recall metrics.
-  - [ ] State core operating assumptions and failure condition.
-- [ ] **Job 3: Live Refresh (Streaming updates per window)**:
-  - [ ] Specify chosen streaming strategy.
-  - [ ] Defend with cumulative latency and memory profile.
-  - [ ] State core operating assumptions and failure condition.
+- [x] **Job 1: Overnight Batch (Full-day batch ranking)**:
+  - [x] Specify chosen algorithm (Merge Sort).
+  - [x] Defend with experimental timing/memory data and mathematical bounds ($3.77\text{ s}$, $O(n \log n)$, stable).
+  - [x] State core operating assumptions ($10\text{ MB}$ memory margin).
+  - [x] State precise edge case or scenario where this choice breaks (Zero-memory embedded OOM $\to$ Heap Sort fallback).
+- [x] **Job 2: Shift Queue (Real-time selection of top $K$ alerts)**:
+  - [x] Specify chosen algorithm/data structure (Size-$K$ Min-Heap).
+  - [x] Defend with empirical crossover data and fraud recall metrics ($35\times$ faster than Full Sort, $50\times$ fewer moves than Buffer).
+  - [x] State core operating assumptions and failure condition ($K \ge 0.35 n \to$ Full Sort fallback).
+- [x] **Job 3: Live Refresh (Streaming updates per window)**:
+  - [x] Specify chosen streaming strategy (Strategy b: Persistent Streaming Min-Heap).
+  - [x] Defend with cumulative latency and memory profile ($0.093\text{ s}$ total latency, $O(K) = 53$ elements memory).
+  - [x] State core operating assumptions and failure condition (Dynamic rolling re-standardization $\to$ Strategy c fallback).
 
 ---
 
