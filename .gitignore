@@ -1,5 +1,7 @@
 The Midnight Queue - Assignment 2.pdf
 mlg-ulb/
+creditcard.csv
+*.zip
 .env
 build_eda_notebook.py
 build_tournament_notebook.py
