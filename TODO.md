@@ -216,16 +216,16 @@ Write concise, engineering-grade recommendations for the platform lead covering 
 
 ### Phase 8: Deliverables Packaging & Viva Defense Prep
 
-- [ ] **PDF Report Generation (`RollNo-A2-Section.pdf`)**:
-  - [ ] Strictly adhere to **$\le 5$ pages limit** for body (Problems A–H + Addendum + AI disclosure).
-  - [ ] Append Prediction Log as appendix.
-  - [ ] Ensure all plots have labeled axes with units, complete legends, and descriptive captions.
-  - [ ] Include 1-paragraph mandatory AI Use Disclosure.
-- [ ] **Data Export**:
-  - [ ] Generate comprehensive `results.csv` containing all measurement runs.
-- [ ] **Code Archive (`RollNo-A2-Section.zip`)**:
-  - [ ] Clean code structure with test suite and reproduction script (`README.md`).
-  - [ ] Ensure no dataset (`creditcard.csv`) or temporary caches are zipped.
-- [ ] **Viva Defense Preparation (20 Marks)**:
-  - [ ] Practice explaining code mechanics and modifying algorithms live on unseen inputs.
-  - [ ] Prepare mathematical justification for every anomaly or clash between theory and measurement.
+- [x] **PDF Report Generation (`24i-2514-A2-A.pdf` & `24i-2514-A2-B.pdf`)**:
+  - [x] Strictly adhere to **$\le 5$ pages limit** for body (Problems A–H + Addendum + AI disclosure).
+  - [x] Append Prediction Log as appendix.
+  - [x] Ensure all plots have labeled axes with units, complete legends, and descriptive captions.
+  - [x] Include 1-paragraph mandatory AI Use Disclosure.
+- [x] **Data Export**:
+  - [x] Generate comprehensive `results.csv` containing all measurement runs.
+- [x] **Code Archive (`24i-2514-A2-A.zip` & `24i-2514-A2-B.zip`)**:
+  - [x] Clean code structure with test suite and reproduction script (`README.md`).
+  - [x] Ensure no dataset (`creditcard.csv`) or temporary caches are zipped.
+- [x] **Viva Defense Preparation (20 Marks)**:
+  - [x] Practice explaining code mechanics and modifying algorithms live on unseen inputs (`reports/viva_defense_guide.md`).
+  - [x] Prepare mathematical justification for every anomaly or clash between theory and measurement.

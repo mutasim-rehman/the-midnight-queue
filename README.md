@@ -208,3 +208,41 @@ py -m pytest tests/test_problem_b.py -v
 - [x] **Top-$K$ Accuracy:** Both Min-Heap and Bounded Buffer outputs match `oracle[:K]`.
 - [x] **Conditions C1–C6:** Tested on sampled datasets.
 - [x] **Naive QuickSort Recursion Handling:** Proves that native recursion crashes with `RecursionError` on sorted inputs of size $1,200$, while the iterative stack completes safely.
+- [x] **Analyst Console Endpoints:** Automated test suite in `tests/test_console.py` verifies web serving, JSON API, and Problem G rules.
+
+---
+
+## 🚀 6. How to Reproduce All Deliverables
+
+### A. Run Full Test Suite (43 Tests)
+```bash
+py -m pytest -v
+```
+
+### B. Launch The Analyst Console (Bonus Deliverable — Section 6)
+```bash
+py console.py
+# Open your browser at http://127.0.0.1:8050
+```
+
+### C. Re-compile the Strict 5-Page PDF Report
+```bash
+py build_pdf_report.py
+# Outputs 24i-2514-A2-A.pdf and 24i-2514-A2-B.pdf (strictly 5 pages verified)
+```
+
+### D. Package Clean Submission Zip Archive
+```bash
+py package_submission.py
+# Produces 24i-2514-A2-A.zip (strictly excludes creditcard.csv and caches)
+```
+
+---
+
+## 📚 7. Master Documentation Directory (`reports/`)
+
+- **[`reports/problem_f_mathematical_case.md`](file:///d:/the-midnight-queue/reports/problem_f_mathematical_case.md):** Complete mathematical derivations (M1 to M8) including recurrence unrolling, recursion trees, Master's Theorem, exact inversion count ($I = 262,763,679$), and Lomuto duplicate combinatorics.
+- **[`reports/problem_h_recommendations.md`](file:///d:/the-midnight-queue/reports/problem_h_recommendations.md):** Executive Recommendations for the Platform Lead covering Overnight Batch, Shift Queue, and Live Streaming Refresh.
+- **[`reports/problem_g_change_request.md`](file:///d:/the-midnight-queue/reports/problem_g_change_request.md):** Formal Problem G Addendum analyzing burst fraud mitigation (Freshest First CR-A vs. Continuous Risk CR-B), Algorithmic Impact Matrix, and fresh measurements.
+- **[`reports/viva_defense_guide.md`](file:///d:/the-midnight-queue/reports/viva_defense_guide.md):** Oral examination prep guide, top 10 viva questions and model answers, and examiner live code modification drills.
+
