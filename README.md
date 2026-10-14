@@ -239,6 +239,7 @@ py console.py
 
 ## 📚 7. Master Documentation Directory (`reports/`)
 
+- **[`reports/master_codebase_and_demo_guide.md`](file:///d:/the-midnight-queue/reports/master_codebase_and_demo_guide.md):** **Master Reading Order & Viva Defense Playbook** — 7-step reading sequence, 60-second live demo script, in-depth question bank with model answers, and live code modification drills.
 - **[`reports/problem_f_mathematical_case.md`](file:///d:/the-midnight-queue/reports/problem_f_mathematical_case.md):** Complete mathematical derivations (M1 to M8) including recurrence unrolling, recursion trees, Master's Theorem, exact inversion count ($I = 262,763,679$), and Lomuto duplicate combinatorics.
 - **[`reports/problem_h_recommendations.md`](file:///d:/the-midnight-queue/reports/problem_h_recommendations.md):** Executive Recommendations for the Platform Lead covering Overnight Batch, Shift Queue, and Live Streaming Refresh.
 - **[`reports/problem_g_change_request.md`](file:///d:/the-midnight-queue/reports/problem_g_change_request.md):** Formal Problem G Addendum analyzing burst fraud mitigation (Freshest First CR-A vs. Continuous Risk CR-B), Algorithmic Impact Matrix, and fresh measurements.
