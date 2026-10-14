@@ -149,32 +149,32 @@ flowchart TD
 
 ### Phase 5: Theoretical Foundations & Proofs (Problem F — 22 Marks)
 
-- [ ] **M1 — Insertion Sort (3 Marks):**
-  - [ ] Direct analysis of best, average, and worst-case running times.
-  - [ ] Express running time in terms of $n$ and inversion count $I$.
-  - [ ] Measure exact inversion count $I$ on the personal C5 sample.
-- [ ] **M2 — Merge Sort (3 Marks):**
-  - [ ] Solve recurrence $T(n) = 2T(n/2) + \Theta(n)$ using iteration (unrolling).
-  - [ ] Formally verify solution using Master's Theorem.
-- [ ] **M3 — Quick Sort (4 Marks):**
-  - [ ] (a) Worst case: $T(n) = T(n-1) + \Theta(n)$ by iteration.
-  - [ ] (b) Best case: $T(n) = 2T(n/2) + \Theta(n)$ by recursion tree.
-  - [ ] (c) 1:9 Unbalanced split: $T(n) = T(n/10) + T(9n/10) + n$ by recursion tree; derive tight bound $\Theta(n \log n)$.
-- [ ] **M4 — Heap Sort (3 Marks):**
-  - [ ] Justify $O(n)$ build-heap cost: $\sum_{h=0}^{\lfloor \log n \rfloor} \lceil \frac{n}{2^{h+1}} \rceil O(h) = O(n)$.
-  - [ ] Justify total $O(n \log n)$ cost.
-- [ ] **M5 — Top-$K$ Complexity & Crossover (3 Marks):**
-  - [ ] Derive asymptotic costs of methods (a), (b), and (c) from Problem D in terms of $n$ and $K$.
-  - [ ] Predict analytical crossover $K$ for $n = 100,000$ and compare with experimental data.
-- [ ] **M6 — Naive QuickSort on C6 (3 Marks):**
-  - [ ] Derive exact comparison count for band groups of sizes $m_1 \dots m_d$.
-  - [ ] Calculate predicted comparisons from actual dataset band group sizes.
-  - [ ] Compare theoretical prediction against measured comparison count.
-- [ ] **M7 — Live Feed Asymptotics (2 Marks):**
-  - [ ] Derive total cost over $w$ windows in terms of $n, w, K$ for strategies (a), (b), and (c).
-  - [ ] Determine conditions where the optimal strategy shifts.
-- [ ] **M8 — Space Complexity (1 Mark):**
-  - [ ] Provide explicit space complexity analysis (in-place vs. auxiliary) for every contender.
+- [x] **M1 — Insertion Sort (3 Marks):**
+  - [x] Direct analysis of best, average, and worst-case running times.
+  - [x] Express running time in terms of $n$ and inversion count $I$.
+  - [x] Measure exact inversion count $I$ on the personal C5 sample ($I = 262{,}763{,}679$ on full dataset).
+- [x] **M2 — Merge Sort (3 Marks):**
+  - [x] Solve recurrence $T(n) = 2T(n/2) + \Theta(n)$ using iteration (unrolling).
+  - [x] Formally verify solution using Master's Theorem.
+- [x] **M3 — Quick Sort (4 Marks):**
+  - [x] (a) Worst case: $T(n) = T(n-1) + \Theta(n)$ by iteration.
+  - [x] (b) Best case: $T(n) = 2T(n/2) + \Theta(n)$ by recursion tree.
+  - [x] (c) 1:9 Unbalanced split: $T(n) = T(n/10) + T(9n/10) + n$ by recursion tree; derive tight bound $\Theta(n \log n)$.
+- [x] **M4 — Heap Sort (3 Marks):**
+  - [x] Justify $O(n)$ build-heap cost: $\sum_{h=0}^{\lfloor \log n \rfloor} \lceil \frac{n}{2^{h+1}} \rceil O(h) = O(n)$.
+  - [x] Justify total $O(n \log n)$ cost.
+- [x] **M5 — Top-$K$ Complexity & Crossover (3 Marks):**
+  - [x] Derive asymptotic costs of methods (a), (b), and (c) from Problem D in terms of $n$ and $K$.
+  - [x] Predict analytical crossover $K$ for $n = 100,000$ and compare with experimental data.
+- [x] **M6 — Naive QuickSort on C6 (3 Marks):**
+  - [x] Derive exact comparison count for band groups of sizes $m_1 \dots m_d$.
+  - [x] Calculate predicted comparisons from actual dataset band group sizes.
+  - [x] Compare theoretical prediction against measured comparison count.
+- [x] **M7 — Live Feed Asymptotics (2 Marks):**
+  - [x] Derive total cost over $w$ windows in terms of $n, w, K$ for strategies (a), (b), and (c).
+  - [x] Determine conditions where the optimal strategy shifts.
+- [x] **M8 — Space Complexity (1 Mark):**
+  - [x] Provide explicit space complexity analysis (in-place vs. auxiliary) for every contender.
 
 ---
 
