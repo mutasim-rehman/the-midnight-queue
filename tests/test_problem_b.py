@@ -14,7 +14,6 @@ Requirements tested:
 import pytest
 import copy
 import random
-from typing import List
 
 from src.triage_record import TriageRecord, comes_before
 from src.metrics import Metrics
@@ -27,8 +26,9 @@ from src.algorithms.top_k import top_k_min_heap, top_k_bounded_buffer
 from src.conditions import build_condition
 
 
-def make_dummy_records(n: int, seed: int = 2514) -> List[TriageRecord]:
+def make_dummy_records(n, seed=2514):
     """Generates synthetic TriageRecord data for fast, reproducible testing."""
+
     rng = random.Random(seed)
     records = []
     for i in range(1, n + 1):

@@ -2,11 +2,10 @@
 Input condition generators (C1 through C6) and subsampling pipeline (Section 3.3 and 3.4).
 """
 import random
-from typing import List, Tuple
 from src.triage_record import TriageRecord
 
 
-def subsample_records(full_records: List[TriageRecord], n: int, seed: int) -> List[TriageRecord]:
+def subsample_records(full_records, n, seed):
     """
     Subsamples size n uniformly without replacement using seed s,
     then restores the sample to Time order (as per Section 3.3).
@@ -25,14 +24,11 @@ def subsample_records(full_records: List[TriageRecord], n: int, seed: int) -> Li
     return sampled_records
 
 
-def build_condition(
-    base_records: List[TriageRecord],
-    condition_id: str,
-    seed: int
-) -> Tuple[List[TriageRecord], bool]:
+def build_condition(base_records, condition_id, seed):
     """
     Constructs the specified input condition (C1-C6) from base_records.
     Returns (records, band_only_flag).
+
     
     C1: Arrival (records in file order / Time ascending)
     C2: Shuffled (C1 shuffled with seed s)

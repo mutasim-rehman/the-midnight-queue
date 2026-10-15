@@ -1,31 +1,30 @@
 """
 Dataset loading and feature standardization pipeline according to Section 3.2.
 """
-from pathlib import Path
-from typing import List, Tuple, Optional
+import os
 import numpy as np
 import pandas as pd
 
 from src.triage_record import TriageRecord
 
 
-def find_dataset_path() -> Path:
+def find_dataset_path():
     """Locates the creditcard.csv file in common workspace directories."""
     candidates = [
-        Path("creditcard.csv"),
-        Path("mlg-ulb/creditcardfraud/versions/3/creditcard.csv"),
-        Path("../creditcard.csv"),
-        Path("data/creditcard.csv")
+        "creditcard.csv",
+        os.path.join("mlg-ulb", "creditcardfraud", "versions", "3", "creditcard.csv"),
+        os.path.join("..", "creditcard.csv"),
+        os.path.join("data", "creditcard.csv")
     ]
     for p in candidates:
-        if p.exists():
-            return p.resolve()
+        if os.path.exists(p):
+            return os.path.abspath(p)
     raise FileNotFoundError(
         "creditcard.csv not found. Please ensure the dataset is placed in the workspace."
     )
 
 
-def load_triage_records(csv_path: Optional[Path] = None) -> List[TriageRecord]:
+def load_triage_records(csv_path=None):
     """
     Loads creditcard.csv and computes:
       1. txn_id: 1-indexed row number.
@@ -62,7 +61,7 @@ def load_triage_records(csv_path: Optional[Path] = None) -> List[TriageRecord]:
     amounts = df["Amount"].values.astype(float)
     classes = df["Class"].values.astype(int)
 
-    records: List[TriageRecord] = []
+    records = []
     for i in range(len(df)):
         records.append(
             TriageRecord(
@@ -76,3 +75,4 @@ def load_triage_records(csv_path: Optional[Path] = None) -> List[TriageRecord]:
         )
 
     return records
+
