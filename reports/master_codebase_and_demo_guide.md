@@ -118,7 +118,7 @@ flowchart TD
 ### Step 6: Automated Test Verification
 * 📖 **Read:** [`tests/test_problem_b.py`](file:///d:/the-midnight-queue/tests/test_problem_b.py) & [`tests/test_console.py`](file:///d:/the-midnight-queue/tests/test_console.py)
 * **What to focus on:**
-  - 43 automated unit and integration tests passing:
+  - Standard-library unittest checks with algorithm, condition, and ranking-rule subtests:
     - Edge cases: Empty input, single record, all-equal keys, duplicate-heavy band-only.
     - Bit-for-bit total order validation against Python's `sorted()` oracle.
     - Proves native recursive Naive QuickSort crashes with `RecursionError` on $n=1,200$, while explicit stack succeeds.
@@ -303,7 +303,7 @@ d:\the-midnight-queue\
 │       └── top_k.py                <-- Size-K Min-Heap & Bounded Buffer (Queue Champion)
 │
 ├── tests/
-│   ├── test_problem_b.py           <-- 39 unit/edge-case tests for algorithms
+│   ├── test_problem_b.py           <-- Algorithm and edge-case checks with subtests
 │   └── test_console.py             <-- 4 integration tests for console server & APIs
 │
 ├── reports/                        <-- Comprehensive Analytical Documentation

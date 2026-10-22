@@ -1,25 +1,9 @@
-"""
-In-Place Heap Sort implementation from scratch.
-Uses simple, standard Python with zero external libraries.
-"""
+"""Heap sort: move the weakest remaining item to the end."""
 from src.triage_record import comes_before
 
 
 def heap_sort(arr, metrics=None, band_only=False, rule="standard"):
-    """
-    In-Place Heap Sort.
-    
-    To produce sorted output where arr[0] is the highest triage priority,
-    we build a heap where the root holds the LOWEST priority element
-    (the 'max' element in ascending sorting order).
-    
-    Time Complexity:
-      - Build Heap: O(n)
-      - Extraction: O(n log n)
-      - Total: O(n log n) across all conditions
-    Space Complexity:
-      - O(1) auxiliary space (in-place)
-    """
+    """Build the heap in O(n), then sort in O(n log n). Extra space: O(1)."""
     n = len(arr)
     if n <= 1:
         return arr
@@ -31,7 +15,7 @@ def heap_sort(arr, metrics=None, band_only=False, rule="standard"):
             right = 2 * current + 2
             worst_idx = current
 
-            # Child with lowest triage priority (parent comes before child)
+            # Find the weakest item among the parent and its children.
             if left < size:
                 if comes_before(arr[worst_idx], arr[left], metrics, band_only, rule):
                     worst_idx = left

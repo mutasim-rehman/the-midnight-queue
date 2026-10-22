@@ -1,20 +1,9 @@
-"""
-Hardened QuickSort implementation from scratch.
-Uses simple, standard Python with zero external libraries.
-
-Hardening mechanisms:
-1. Median-of-Three pivot selection (defeats sorted/reverse inputs C3, C4, C5).
-2. 3-Way Partitioning / Dutch National Flag (handles duplicates and C6 band-only in O(n)).
-3. Tail-Call Optimization (recurses on smaller subarray first, bounding stack depth to O(log n) <= 20).
-"""
+"""Quicksort with a middle-of-three pivot and three-way partition."""
 from src.triage_record import comes_before
 
 
 def _median_of_three(arr, low, high, metrics=None, band_only=False, rule="standard"):
-    """
-    Selects median among arr[low], arr[mid], arr[high]
-    and places it at index low to serve as the pivot.
-    """
+    """Put the median of the first, middle, and last items at low."""
     mid = low + (high - low) // 2
 
     if comes_before(arr[mid], arr[low], metrics, band_only, rule):
@@ -42,15 +31,7 @@ def _median_of_three(arr, low, high, metrics=None, band_only=False, rule="standa
 
 
 def quick_sort_hardened(arr, metrics=None, band_only=False, rule="standard"):
-    """
-    Hardened QuickSort with Median-of-Three, 3-Way Partitioning, and Tail-Recursion Loop.
-    
-    Time Complexity:
-      - Best/Average: O(n log n)
-      - Duplicate-Heavy (C6): O(n)
-    Space Complexity:
-      - O(log n) call stack (maximum ~19 frames for 284k records).
-    """
+    """Average O(n log n), worst O(n squared). Smaller-side recursion uses O(log n) stack."""
     n = len(arr)
     if n <= 1:
         return arr
@@ -61,39 +42,39 @@ def quick_sort_hardened(arr, metrics=None, band_only=False, rule="standard"):
                 _median_of_three(arr, low, high, metrics, band_only, rule)
 
             pivot = arr[low]
-            lt = low
-            gt = high
+            before_end = low
+            after_start = high
             i = low + 1
 
-            # 3-Way Dutch National Flag partitioning
-            while i <= gt:
+            # Keep items before, equal to, and after the pivot in separate sections.
+            while i <= after_start:
                 if comes_before(arr[i], pivot, metrics, band_only, rule):
-                    arr[lt], arr[i] = arr[i], arr[lt]
+                    arr[before_end], arr[i] = arr[i], arr[before_end]
                     if metrics is not None:
                         metrics.moves += 2
-                    lt += 1
+                    before_end += 1
                     i += 1
                 elif comes_before(pivot, arr[i], metrics, band_only, rule):
-                    arr[i], arr[gt] = arr[gt], arr[i]
+                    arr[i], arr[after_start] = arr[after_start], arr[i]
                     if metrics is not None:
                         metrics.moves += 2
-                    gt -= 1
+                    after_start -= 1
                 else:
                     # Equal key
                     i += 1
 
-            # Recurse on smaller subarray first to minimize stack depth
-            left_size = lt - 1 - low
-            right_size = high - (gt + 1)
+            # Recurse on the smaller side; handle the larger side in this loop.
+            left_size = before_end - 1 - low
+            right_size = high - (after_start + 1)
 
             if left_size < right_size:
-                if low < lt - 1:
-                    _sort(low, lt - 1)
-                low = gt + 1
+                if low < before_end - 1:
+                    _sort(low, before_end - 1)
+                low = after_start + 1
             else:
-                if gt + 1 < high:
-                    _sort(gt + 1, high)
-                high = lt - 1
+                if after_start + 1 < high:
+                    _sort(after_start + 1, high)
+                high = before_end - 1
 
     _sort(0, n - 1)
     return arr

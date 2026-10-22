@@ -1,18 +1,9 @@
-"""
-Top-K Selection Contenders from scratch.
-Uses simple, standard Python with zero external libraries.
-
-1. Size-K Min-Heap (O(n log K) time, O(K) space)
-2. Bounded Insertion Buffer of size K (O(n) best-case comparisons, O(K) space)
-"""
+"""Keep only the best K records using a heap or a sorted list."""
 from src.triage_record import comes_before
 
 
 class MinHeapTopK:
-    """
-    Min-Heap for Top-K selection.
-    The root heap[0] holds the weakest survivor in the top K.
-    """
+    """The heap root is the weakest record currently kept."""
     def __init__(self, capacity, metrics=None, band_only=False, rule="standard"):
         self.capacity = capacity
         self.metrics = metrics
@@ -21,7 +12,7 @@ class MinHeapTopK:
         self.heap = []
 
     def _is_weaker(self, a, b):
-        """Returns True if 'a' has lower triage priority than 'b'."""
+        """Return True if a has lower priority than b."""
         return comes_before(b, a, self.metrics, self.band_only, self.rule)
 
     def _sift_up(self, idx):
@@ -64,7 +55,7 @@ class MinHeapTopK:
                 self.metrics.moves += 1
             self._sift_up(len(self.heap) - 1)
         else:
-            # If incoming record beats root (weakest survivor):
+            # Replace the weakest survivor only if the new record is better.
             if comes_before(record, self.heap[0], self.metrics, self.band_only, self.rule):
                 self.heap[0] = record
                 if self.metrics is not None:
@@ -72,7 +63,7 @@ class MinHeapTopK:
                 self._sift_down(0)
 
     def get_top_k_sorted(self):
-        """Extracts elements and returns them sorted from rank 1 to rank K."""
+        """Return the kept records in rank order without changing the saved heap."""
         k = len(self.heap)
         result = [None] * k
         heap_copy = list(self.heap)
@@ -95,7 +86,7 @@ class MinHeapTopK:
 
 
 def top_k_min_heap(arr, k, metrics=None, band_only=False, rule="standard"):
-    """Selects top K elements using a size-K Min-Heap."""
+    """Select top K in O(n log K) time plus O(K log K) to order the result."""
     if k <= 0 or len(arr) == 0:
         return []
     k = min(k, len(arr))
@@ -110,7 +101,7 @@ def top_k_min_heap(arr, k, metrics=None, band_only=False, rule="standard"):
 
 
 def _binary_search_pos(buf, target, metrics, band_only, rule="standard"):
-    """Finds insertion position for target in sorted buf."""
+    """Find where target belongs, placing it after equal keys."""
     low = 0
     high = len(buf)
     while low < high:
@@ -123,7 +114,7 @@ def _binary_search_pos(buf, target, metrics, band_only, rule="standard"):
 
 
 def top_k_bounded_buffer(arr, k, metrics=None, band_only=False, rule="standard"):
-    """Selects top K elements using a bounded sorted list of capacity K."""
+    """Keep a sorted list of at most K items. Worst time: O(n K)."""
     if k <= 0 or len(arr) == 0:
         return []
     k = min(k, len(arr))
@@ -135,7 +126,12 @@ def top_k_bounded_buffer(arr, k, metrics=None, band_only=False, rule="standard")
     for record in arr:
         if len(buf) < k:
             pos = _binary_search_pos(buf, record, metrics, band_only, rule)
-            buf.insert(pos, record)
+            buf.append(None)
+            index = len(buf) - 1
+            while index > pos:
+                buf[index] = buf[index - 1]
+                index -= 1
+            buf[pos] = record
             if metrics is not None:
                 metrics.moves += (len(buf) - pos)
         else:
@@ -143,7 +139,12 @@ def top_k_bounded_buffer(arr, k, metrics=None, band_only=False, rule="standard")
             if comes_before(record, buf[-1], metrics, band_only, rule):
                 pos = _binary_search_pos(buf[:-1], record, metrics, band_only, rule)
                 buf.pop()
-                buf.insert(pos, record)
+                buf.append(None)
+                index = len(buf) - 1
+                while index > pos:
+                    buf[index] = buf[index - 1]
+                    index -= 1
+                buf[pos] = record
                 if metrics is not None:
                     metrics.moves += (k - pos)
 

@@ -1,15 +1,10 @@
-"""
-Input condition generators (C1 through C6) and subsampling pipeline (Section 3.3 and 3.4).
-"""
+"""Prepare the six input conditions with a fixed random seed."""
 import random
-from src.triage_record import TriageRecord
+from src.triage_record import arrival_key, standard_key
 
 
 def subsample_records(full_records, n, seed):
-    """
-    Subsamples size n uniformly without replacement using seed s,
-    then restores the sample to Time order (as per Section 3.3).
-    """
+    """Sample without replacement, then restore arrival order."""
     total = len(full_records)
     if n >= total:
         return list(full_records)
@@ -17,27 +12,20 @@ def subsample_records(full_records, n, seed):
     rng = random.Random(seed)
     # Sample n indices uniformly without replacement
     sampled_indices = rng.sample(range(total), n)
-    sampled_records = [full_records[i] for i in sampled_indices]
+    sampled_records = []
+    for index in sampled_indices:
+        sampled_records.append(full_records[index])
 
     # Restore to Time order (with txn_id tie-breaking if Time is equal)
-    sampled_records.sort(key=lambda r: (r.Time, r.txn_id))
+    sampled_records.sort(key=arrival_key)
     return sampled_records
 
 
 def build_condition(base_records, condition_id, seed):
-    """
-    Constructs the specified input condition (C1-C6) from base_records.
-    Returns (records, band_only_flag).
-
-    
-    C1: Arrival (records in file order / Time ascending)
-    C2: Shuffled (C1 shuffled with seed s)
-    C3: Pre-ranked (records already in triage order)
-    C4: Reverse-ranked (exact reverse of triage order)
-    C5: Nearly ranked (C3 with 1% of records moved to random positions)
-    C6: Band-only (C1, but the sort key is band alone)
-    """
+    """Return a fresh input list and whether to compare only bands."""
     cond = condition_id.upper()
+    if len(base_records) == 0 and cond in ["C1", "C2", "C3", "C4", "C5", "C6"]:
+        return [], cond == "C6"
 
     if cond == "C1":
         # Arrival order (copy of base_records, which is already in Time order)
@@ -52,18 +40,18 @@ def build_condition(base_records, condition_id, seed):
 
     elif cond == "C3":
         # Pre-ranked: sorted in total triage order
-        records = sorted(base_records, key=lambda r: r.triage_key())
+        records = sorted(base_records, key=standard_key)
         return records, False
 
     elif cond == "C4":
         # Reverse-ranked: exact reverse of triage order
-        c3_records = sorted(base_records, key=lambda r: r.triage_key())
+        c3_records = sorted(base_records, key=standard_key)
         c3_records.reverse()
         return c3_records, False
 
     elif cond == "C5":
         # Nearly ranked: C3 with 1% of records moved to random positions
-        records = sorted(base_records, key=lambda r: r.triage_key())
+        records = sorted(base_records, key=standard_key)
         n = len(records)
         num_displaced = max(1, int(0.01 * n))
         rng = random.Random(seed)

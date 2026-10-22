@@ -209,7 +209,7 @@ Write concise, engineering-grade recommendations for the platform lead covering 
   - [x] Interactive controls: algorithm selector, condition selector (C1–C6), sample size ($n$), $K$ slider ($5$ to $300$), and Problem G rule toggle.
   - [x] Interactive display: live table of top $K$ transactions with color-coded risk bands and fraud alert badges.
   - [x] Performance metrics display: elapsed execution time, key comparisons, element moves, auxiliary memory, and fraud recall %.
-  - [x] Implement automated test suite (`tests/test_console.py` — 4 passed).
+  - [x] Implement automated test suite (`tests/test_console.py` — console checks and API subtests).
   - [x] Document 1-paragraph summary and viva demonstration instructions in report.
 
 ---

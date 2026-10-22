@@ -5,6 +5,29 @@
 > **Student Parameters:** Roll Number Seed $s = 2514$, Shift Capacity $K = 25 + (2514 \pmod{226}) = 53$  
 > **Core Constraint:** All sorting and selection algorithms implemented **from scratch** using **clean, standard Python with minimal/no external libraries**.
 
+
+## Running the simplified code
+
+The application and tests use only Python's standard library. Run these commands from the project folder:
+
+```bash
+python -m unittest discover -s tests -v
+python console.py
+```
+
+Open http://127.0.0.1:8050 for the console. Its page is in `console.html`; the Python server and queue calculation are in `console.py`. Both files are needed when copying the console.
+
+The loader uses three CSV passes: calculate means, calculate population standard deviations, then calculate risk and create records. This is easier to trace, but loads more slowly than the previous NumPy/pandas version. Loading is excluded from algorithm benchmarks.
+
+The notebooks use ordinary loops and named functions for their Python logic. NumPy, pandas, Matplotlib, and seaborn remain in the data analysis/plotting notebook; Matplotlib remains in the benchmark notebooks. Install those packages and Jupyter separately to run the notebooks.
+
+The bounded buffer now shifts items explicitly rather than calling `list.insert`. Its comparisons and counted moves are preserved, but runtime can change. Existing `results.csv`, figures, reports, and PDFs contain historical measurements. Notebook outputs were cleared; rerun the notebooks before using new timings in a submission. ZIP archives have been removed.
+
+The EDA notebook now uses population standard deviation (`ddof=0`), matching the loader. Previously it used pandas' default sample standard deviation.
+
+Read the code in this order: `triage_record.py`, `metrics.py`, `dataset.py`, `conditions.py`, the algorithm files, then `console.py` and the notebooks. Comments explain the purpose of each main step.
+
+
 ---
 
 ## 📖 1. Project Overview & Problem Statement
@@ -59,7 +82,7 @@ the-midnight-queue/
 │
 ├── tests/                              # Automated correctness verification suite
 │   ├── __init__.py
-│   └── test_problem_b.py               # 39 unit tests covering edge cases & conditions
+│   └── test_problem_b.py               # unit tests with algorithm and condition subtests covering edge cases & conditions
 │
 ├── figures/                            # Output visual plots and tournament charts
 └── mlg-ulb/                            # Kaggle credit card dataset directory (git-ignored)
@@ -196,7 +219,7 @@ The project includes an automated test suite verifying edge cases, stability, to
 
 Run the test suite using standard Python:
 ```bash
-py -m pytest tests/test_problem_b.py -v
+python -m unittest tests.test_problem_b -v
 ```
 
 ### Verification Matrix Covered in Tests:
@@ -214,9 +237,9 @@ py -m pytest tests/test_problem_b.py -v
 
 ## 🚀 6. How to Reproduce All Deliverables
 
-### A. Run Full Test Suite (43 Tests)
+### A. Run Full Test Suite
 ```bash
-py -m pytest -v
+python -m unittest discover -s tests -v
 ```
 
 ### B. Launch The Analyst Console (Bonus Deliverable — Section 6)

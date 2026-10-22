@@ -1,14 +1,4 @@
-"""
-The Analyst Console: Lightweight Interactive Interface for Fraud Analysts.
-Assignment 2 Bonus Deliverable (Section 6 — 5 Marks).
-
-Zero External Web Frameworks: Built strictly with Python's standard library
-(http.server, urllib.parse, json, time).
-
-Usage:
-    py console.py
-Then open http://localhost:8050 in any browser.
-"""
+"""Serve the analyst page and run the selected algorithm. Start with python console.py."""
 import http.server
 import socketserver
 import urllib.parse
@@ -16,10 +6,6 @@ import json
 import time
 import math
 import os
-import sys
-
-# Add project root to sys.path
-sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 
 from src.dataset import load_triage_records
@@ -32,335 +18,106 @@ from src.algorithms.quick_sort_hardened import quick_sort_hardened
 
 PORT = 8050
 
-# Cache master records
-print("Initializing Analyst Console backend...")
-print("Loading master dataset...")
-t0 = time.perf_counter()
-MASTER_RECORDS = load_triage_records()
-print(f"Loaded {len(MASTER_RECORDS):,} transactions in {time.perf_counter() - t0:.2f}s.")
+# Load records on the first request and reuse them afterwards.
+MASTER_RECORDS = None
 
-HTML_PAGE = r"""<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Midnight Queue — Analyst Console</title>
-    <style>
-        :root {
-            --bg: #0f172a;
-            --surface: #1e293b;
-            --surface-hover: #334155;
-            --primary: #38bdf8;
-            --primary-hover: #0ea5e9;
-            --text: #f8fafc;
-            --text-muted: #94a3b8;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --success: #10b981;
-            --border: #334155;
+
+def get_master_records():
+    global MASTER_RECORDS
+    if MASTER_RECORDS is None:
+        print("Loading transaction records...")
+        MASTER_RECORDS = load_triage_records()
+        print(f"Loaded {len(MASTER_RECORDS):,} transactions.")
+    return MASTER_RECORDS
+
+
+with open(os.path.join(os.path.dirname(__file__), "console.html"), encoding="utf-8") as page_file:
+    HTML_PAGE = page_file.read()
+
+
+def build_queue(algo, cond_id, n, k, rule="standard"):
+    """Prepare an input, time the algorithm, and return the queue and counters."""
+    # Prepare data
+    seed = 2514
+    sub = subsample_records(get_master_records(), n, seed=seed)
+    cond_data, band_only = build_condition(sub, cond_id, seed=seed)
+    total_frauds_sample = 0
+    for r in sub:
+        total_frauds_sample += r.Class
+
+    metrics = Metrics()
+    start_time = time.perf_counter()
+    top_records = []
+    aux_mem = k
+
+    if algo == "min_heap":
+        top_records = top_k_min_heap(cond_data, k, metrics, band_only, rule=rule)
+        aux_mem = k
+    elif algo == "bounded_buffer":
+        top_records = top_k_bounded_buffer(cond_data, k, metrics, band_only, rule=rule)
+        aux_mem = k
+    elif algo == "merge_sort":
+        arr_copy = list(cond_data)
+        merge_sort(arr_copy, metrics, band_only, rule=rule)
+        top_records = arr_copy[:k]
+        aux_mem = n
+    elif algo == "quick_hardened":
+        arr_copy = list(cond_data)
+        quick_sort_hardened(arr_copy, metrics, band_only, rule=rule)
+        top_records = arr_copy[:k]
+        aux_mem = 0
+        if n > 0:
+            aux_mem = int(math.log2(n))
+    elif algo == "heap_sort":
+        arr_copy = list(cond_data)
+        heap_sort(arr_copy, metrics, band_only, rule=rule)
+        top_records = arr_copy[:k]
+        aux_mem = 0
+
+    elapsed_time = time.perf_counter() - start_time
+    frauds_captured = 0
+    for r in top_records:
+        frauds_captured += r.Class
+
+    record_rows = []
+    for record in top_records:
+        row = {
+            "txn_id": record.txn_id,
+            "band": record.band,
+            "Amount": record.Amount,
+            "Time": record.Time,
+            "risk": record.risk,
+            "Class": record.Class,
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            padding: 24px;
-            line-height: 1.5;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 24px;
-        }
-        .header h1 { font-size: 24px; font-weight: 700; color: var(--primary); }
-        .header p { font-size: 13px; color: var(--text-muted); }
-        .badge {
-            background: #0284c7;
-            color: #fff;
-            padding: 4px 10px;
-            border-radius: 9999px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .controls-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 24px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            align-items: end;
-        }
-        .control-group { display: flex; flex-direction: column; gap: 6px; }
-        label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
-        select, input[type="number"], input[type="range"] {
-            background: #0f172a;
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
-        }
-        select:focus, input:focus { border-color: var(--primary); }
-        .k-slider-container { display: flex; align-items: center; gap: 12px; }
-        .k-val-display { font-size: 16px; font-weight: 700; color: var(--primary); min-width: 45px; }
-        button.btn-primary {
-            background: var(--primary);
-            color: #0f172a;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        button.btn-primary:hover { background: var(--primary-hover); }
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        .metric-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 16px;
-        }
-        .metric-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
-        .metric-value { font-size: 24px; font-weight: 700; color: var(--text); margin-top: 4px; }
-        .metric-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-        .table-container {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
-        thead { background: #0f172a; }
-        th { padding: 12px 16px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border); }
-        td { padding: 12px 16px; border-bottom: 1px solid var(--border); }
-        tr:hover { background: var(--surface-hover); }
-        .band-tag {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 12px;
-        }
-        .band-9 { background: #dc2626; color: #fff; }
-        .band-8 { background: #ea580c; color: #fff; }
-        .band-7 { background: #d97706; color: #fff; }
-        .band-6, .band-5 { background: #ca8a04; color: #fff; }
-        .band-low { background: #475569; color: #fff; }
-        .fraud-alert {
-            background: #ef4444;
-            color: #fff;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 11px;
-            animation: pulse 1.5s infinite;
-        }
-        .normal-txn { color: var(--text-muted); font-size: 12px; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <div>
-            <h1>The Midnight Queue: Analyst Console</h1>
-            <p>Real-Time Fraud Triage & Algorithmic Performance Benchmarking (Assignment 2 Bonus)</p>
-        </div>
-        <div>
-            <span class="badge">Student Seed s = 2514 | Quota K = 53</span>
-        </div>
-    </div>
+        record_rows.append(row)
+    response_payload = {
+        "algorithm": algo,
+        "condition": cond_id,
+        "n": n,
+        "k": k,
+        "time_sec": elapsed_time,
+        "comparisons": metrics.comparisons,
+        "moves": metrics.moves,
+        "aux_memory": aux_mem,
+        "total_frauds_in_sample": total_frauds_sample,
+        "frauds_captured": frauds_captured,
+        "records": record_rows
+    }
 
-    <div class="controls-card">
-        <div class="control-group">
-            <label for="algoSelect">Sorting / Selection Algorithm</label>
-            <select id="algoSelect">
-                <option value="min_heap" selected>Size-K Min-Heap (Recommended)</option>
-                <option value="bounded_buffer">Bounded Insertion Buffer</option>
-                <option value="merge_sort">Full Sort: Merge Sort [:K]</option>
-                <option value="quick_hardened">Full Sort: Hardened QuickSort [:K]</option>
-                <option value="heap_sort">Full Sort: Heap Sort [:K]</option>
-            </select>
-        </div>
+    return response_payload
 
-        <div class="control-group">
-            <label for="condSelect">Input Condition</label>
-            <select id="condSelect">
-                <option value="C1" selected>C1: Arrival Order (Time ascending)</option>
-                <option value="C2">C2: Uniform Shuffled (Seed 2514)</option>
-                <option value="C3">C3: Pre-ranked (Triage order)</option>
-                <option value="C4">C4: Reverse-ranked</option>
-                <option value="C5">C5: Nearly Ranked (1% displaced)</option>
-                <option value="C6">C6: Band-Only</option>
-            </select>
-        </div>
-
-        <div class="control-group">
-            <label for="sizeSelect">Sample Size (n)</label>
-            <select id="sizeSelect">
-                <option value="1000">1,000 transactions</option>
-                <option value="10000" selected>10,000 transactions</option>
-                <option value="100000">100,000 transactions</option>
-                <option value="284807">284,807 (Full Dataset)</option>
-            </select>
-        </div>
-
-        <div class="control-group">
-            <label for="kRange">Shift Capacity (K)</label>
-            <div class="k-slider-container">
-                <input type="range" id="kRange" min="5" max="300" value="53" oninput="updateK(this.value)">
-                <span class="k-val-display" id="kDisplay">53</span>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label for="ruleSelect">Triage Order Rule (Problem G)</label>
-            <select id="ruleSelect">
-                <option value="standard" selected>Standard (Band &darr;, Amount &darr;, Time &uarr;)</option>
-                <option value="cr_freshness">Change Request A: Freshness (Time &darr;)</option>
-                <option value="cr_risk">Change Request B: Continuous Risk (Risk &darr;)</option>
-            </select>
-        </div>
-
-        <button class="btn-primary" onclick="runBenchmark()">Build Queue</button>
-    </div>
-
-    <div class="metrics-grid">
-        <div class="metric-card">
-            <div class="metric-label">Execution Time</div>
-            <div class="metric-value" id="valTime">-- ms</div>
-            <div class="metric-sub" id="subTime">Wall-clock seconds</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-label">Key Comparisons</div>
-            <div class="metric-value" id="valComps">--</div>
-            <div class="metric-sub">Pairwise triage comparisons</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-label">Element Moves</div>
-            <div class="metric-value" id="valMoves">--</div>
-            <div class="metric-sub">Swaps / buffer assignments</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-label">Auxiliary Memory</div>
-            <div class="metric-value" id="valMemory">--</div>
-            <div class="metric-sub" id="subMemory">Peak elements allocated</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-label">Frauds Captured</div>
-            <div class="metric-value" id="valFrauds" style="color: var(--danger);">-- / --</div>
-            <div class="metric-sub" id="subRecall">Recall % in Top-K</div>
-        </div>
-    </div>
-
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Txn ID</th>
-                    <th>Risk Band</th>
-                    <th>Amount (€)</th>
-                    <th>Time (s)</th>
-                    <th>Risk Score</th>
-                    <th>Class / Alert</th>
-                </tr>
-            </thead>
-            <tbody id="queueTableBody">
-                <tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 30px;">Select parameters above and click "Build Queue"</td></tr>
-            </tbody>
-        </table>
-    </div>
-
-    <script>
-        function updateK(val) {
-            document.getElementById('kDisplay').innerText = val;
-        }
-
-        async function runBenchmark() {
-            const algo = document.getElementById('algoSelect').value;
-            const cond = document.getElementById('condSelect').value;
-            const size = document.getElementById('sizeSelect').value;
-            const k = document.getElementById('kRange').value;
-            const rule = document.getElementById('ruleSelect').value;
-
-            document.getElementById('valTime').innerText = "Running...";
-            document.getElementById('queueTableBody').innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 30px;">Running algorithmic triage engine...</td></tr>`;
-
-            try {
-                const resp = await fetch(`/api/run?algo=${algo}&cond=${cond}&n=${size}&k=${k}&rule=${rule}`);
-                const data = await resp.json();
-
-                // Update Metrics
-                document.getElementById('valTime').innerText = data.time_sec < 0.001 ? `${(data.time_sec * 1000).toFixed(2)} ms` : `${data.time_sec.toFixed(4)} s`;
-                document.getElementById('valComps').innerText = Number(data.comparisons).toLocaleString();
-                document.getElementById('valMoves').innerText = Number(data.moves).toLocaleString();
-                document.getElementById('valMemory').innerText = `${Number(data.aux_memory).toLocaleString()} elems`;
-                document.getElementById('valFrauds').innerText = `${data.frauds_captured} / ${data.total_frauds_in_sample}`;
-                document.getElementById('subRecall').innerText = `${((data.frauds_captured / (data.total_frauds_in_sample || 1)) * 100).toFixed(2)}% Recall`;
-
-                // Render Table
-                let rowsHtml = '';
-                data.records.forEach((r, idx) => {
-                    let bandClass = 'band-low';
-                    if (r.band === 9) bandClass = 'band-9';
-                    else if (r.band === 8) bandClass = 'band-8';
-                    else if (r.band === 7) bandClass = 'band-7';
-                    else if (r.band >= 5) bandClass = 'band-6';
-
-                    const alertBadge = r.Class === 1 
-                        ? `<span class="fraud-alert">FRAUD CONFIRMED</span>` 
-                        : `<span class="normal-txn">Legitimate</span>`;
-
-                    rowsHtml += `
-                        <tr>
-                            <td><strong>#${idx + 1}</strong></td>
-                            <td>${r.txn_id}</td>
-                            <td><span class="band-tag ${bandClass}">Band ${r.band}</span></td>
-                            <td><strong>€${r.Amount.toFixed(2)}</strong></td>
-                            <td>${r.Time.toFixed(1)}s</td>
-                            <td>${r.risk.toFixed(2)}</td>
-                            <td>${alertBadge}</td>
-                        </tr>
-                    `;
-                });
-                document.getElementById('queueTableBody').innerHTML = rowsHtml;
-            } catch (err) {
-                alert("Execution error: " + err);
-            }
-        }
-
-        // Run once on load
-        window.onload = runBenchmark;
-    </script>
-</body>
-</html>
-"""
 
 class AnalystConsoleHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         parsed = urllib.parse.urlparse(self.path)
-        
+
         if parsed.path == "/" or parsed.path == "/index.html":
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.end_headers()
             self.wfile.write(HTML_PAGE.encode("utf-8"))
             return
-            
+
         elif parsed.path == "/api/run":
             query = urllib.parse.parse_qs(parsed.query)
             algo = query.get("algo", ["min_heap"])[0]
@@ -368,74 +125,16 @@ class AnalystConsoleHandler(http.server.BaseHTTPRequestHandler):
             n = int(query.get("n", [10000])[0])
             k = int(query.get("k", [53])[0])
             rule = query.get("rule", ["standard"])[0]
-            
-            # Prepare data
-            seed = 2514
-            sub = subsample_records(MASTER_RECORDS, n, seed=seed)
-            cond_data, band_only = build_condition(sub, cond_id, seed=seed)
-            total_frauds_sample = sum(r.Class for r in sub)
-            
-            m = Metrics()
-            t0 = time.perf_counter()
-            top_records = []
-            aux_mem = k
-            
-            if algo == "min_heap":
-                top_records = top_k_min_heap(cond_data, k, m, band_only, rule=rule)
-                aux_mem = k
-            elif algo == "bounded_buffer":
-                top_records = top_k_bounded_buffer(cond_data, k, m, band_only, rule=rule)
-                aux_mem = k
-            elif algo == "merge_sort":
-                arr_copy = list(cond_data)
-                merge_sort(arr_copy, m, band_only, rule=rule)
-                top_records = arr_copy[:k]
-                aux_mem = n
-            elif algo == "quick_hardened":
-                arr_copy = list(cond_data)
-                quick_sort_hardened(arr_copy, m, band_only, rule=rule)
-                top_records = arr_copy[:k]
-                aux_mem = int(math.log2(n)) if n > 0 else 0
-            elif algo == "heap_sort":
-                arr_copy = list(cond_data)
-                heap_sort(arr_copy, m, band_only, rule=rule)
-                top_records = arr_copy[:k]
-                aux_mem = 0
-                
-            dt = time.perf_counter() - t0
-            frauds_captured = sum(r.Class for r in top_records)
-            
-            response_payload = {
-                "algorithm": algo,
-                "condition": cond_id,
-                "n": n,
-                "k": k,
-                "time_sec": dt,
-                "comparisons": m.comparisons,
-                "moves": m.moves,
-                "aux_memory": aux_mem,
-                "total_frauds_in_sample": total_frauds_sample,
-                "frauds_captured": frauds_captured,
-                "records": [
-                    {
-                        "txn_id": r.txn_id,
-                        "band": r.band,
-                        "Amount": r.Amount,
-                        "Time": r.Time,
-                        "risk": r.risk,
-                        "Class": r.Class
-                    }
-                    for r in top_records
-                ]
-            }
-            
+
+            response_payload = build_queue(algo, cond_id, n, k, rule)
+
             self.send_response(200)
             self.send_header("Content-Type", "application/json; charset=utf-8")
             self.send_header("Access-Control-Allow-Origin", "*")
             self.end_headers()
             self.wfile.write(json.dumps(response_payload).encode("utf-8"))
             return
-            
+
         else:
             self.send_response(404)
             self.end_headers()
@@ -445,7 +144,7 @@ def run_server():
     with socketserver.TCPServer(server_address, AnalystConsoleHandler) as httpd:
         print(f"\n=======================================================")
         print(f"[+] Analyst Console Server Running at http://127.0.0.1:{PORT}")
-        print(f"Press Ctrl+C to terminate.")
+        print("Press Ctrl+C to stop.")
         print(f"=======================================================\n")
         try:
             httpd.serve_forever()

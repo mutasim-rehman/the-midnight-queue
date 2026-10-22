@@ -1,24 +1,9 @@
-"""
-Naive QuickSort implementation from scratch.
-Uses Lomuto partition scheme with the last element as pivot.
-Uses simple, standard Python with zero external libraries.
-
-Failure & Crash Handling:
-- On sorted (C3) or reverse-sorted (C4) arrays, Lomuto with last element pivot
-  creates an unbalanced recursion tree of depth n.
-- In Python, this crashes with RecursionError when n >= 1000.
-- Handling: We support both native recursion (which triggers and documents RecursionError)
-  and an explicit list-based stack (which avoids Python's call stack limit, allowing
-  the algorithm to run up to the 5-minute DNF threshold).
-"""
+"""Quicksort with the last item as pivot. Sorted inputs can take O(n squared)."""
 from src.triage_record import comes_before
 
 
 def _lomuto_partition(arr, low, high, metrics=None, band_only=False, rule="standard"):
-    """
-    Standard Lomuto partition scheme (CLRS Chapter 7.1).
-    Takes the last element arr[high] as pivot and partitions arr[low..high].
-    """
+    """Move items that rank before the pivot to the left. Return the pivot index."""
     pivot = arr[high]
     i = low - 1
 
@@ -39,21 +24,13 @@ def _lomuto_partition(arr, low, high, metrics=None, band_only=False, rule="stand
 
 
 def quick_sort_naive(arr, metrics=None, band_only=False, rule="standard", use_explicit_stack=True):
-    """
-    Naive QuickSort using Lomuto partition with last element as pivot.
-    
-    Time Complexity:
-      - Best/Average: O(n log n)
-      - Worst (sorted or reverse-sorted input): O(n^2)
-    Space Complexity:
-      - O(n) call stack or explicit stack in worst case.
-    """
+    """Use a list of pending ranges, or recursion to demonstrate its depth limit."""
     n = len(arr)
     if n <= 1:
         return arr
 
     if not use_explicit_stack:
-        # Recursive version to demonstrate call-stack crash on large sorted data
+        # This version can hit Python's recursion limit.
         def _recursive_qs(low, high):
             if low < high:
                 p = _lomuto_partition(arr, low, high, metrics, band_only, rule)
@@ -71,7 +48,7 @@ def quick_sort_naive(arr, metrics=None, band_only=False, rule="standard", use_ex
             ) from e
         return arr
 
-    # Iterative version using a simple Python list as a stack
+    # Save ranges in a list instead of using recursive calls.
     stack = [(0, n - 1)]
     while len(stack) > 0:
         low, high = stack.pop()

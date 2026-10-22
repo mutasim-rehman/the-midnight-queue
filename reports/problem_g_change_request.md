@@ -177,7 +177,7 @@ http://127.0.0.1:8050
 ### Automated Integration Test Verification:
 The console is fully verified by an automated test suite (`tests/test_console.py`):
 ```bash
-py -m pytest tests/test_console.py -v
+python -m unittest tests.test_console -v
 ```
 *Result:* 4 passed in 4.82s (verifying HTML serving, API JSON format, Top-K Min-Heap, MergeSort, and Change Request rule parameters).
 
@@ -186,7 +186,7 @@ py -m pytest tests/test_console.py -v
 ## 📌 Checklist Summary for Phase 7
 
 - [x] Implemented Change Request comparator rules (`cr_freshness` and `cr_risk`) across `src/triage_record.py` and all algorithms.
-- [x] Verified full backwards compatibility: all 39 Problem B unit tests continue to pass (`py -m pytest tests/test_problem_b.py -v`).
+- [x] Verified full backwards compatibility: the Problem B checks and subtests pass (`python -m unittest tests.test_problem_b -v`).
 - [x] Generated empirical benchmarks across $n \in \{1\text{k}, 10\text{k}, 100\text{k}, 284.8\text{k}\}$ and $K \in \{10 \dots 10{,}000\}$ via [`build_problem_g_benchmark.py`](file:///d:/the-midnight-queue/build_problem_g_benchmark.py).
 - [x] Generated publication-grade plots in [`figures/problem_g/`](file:///d:/the-midnight-queue/figures/problem_g/):
   - [`plot_g1_fraud_recall_comparison.png`](file:///d:/the-midnight-queue/figures/problem_g/plot_g1_fraud_recall_comparison.png)

@@ -1,34 +1,20 @@
-"""
-Insertion Sort implementation from scratch.
-Uses simple, standard Python with zero external libraries.
-"""
+"""Insertion sort: insert each item into the sorted part on its left."""
 from src.triage_record import comes_before
 
 
 def insertion_sort(arr, metrics=None, band_only=False, rule="standard"):
-    """
-    Sorts arr in-place using classic Insertion Sort (CLRS Chapter 2.1).
-    
-    Time Complexity:
-      - Best (already sorted): O(n) comparisons, O(n) moves.
-      - Worst (reverse sorted): O(n^2) comparisons, O(n^2) moves.
-      - Average: O(n + I) where I is the number of inversions.
-    Space Complexity:
-      - O(1) auxiliary space (in-place).
-    Stability:
-      - Stable (does not swap equal items).
-    """
+    """Stable, in place. Time: O(n + inversions). Extra space: O(1)."""
     n = len(arr)
     if n <= 1:
         return arr
 
-    # Walk from the 2nd element to the end of the array
+    # The part before i is already sorted.
     for i in range(1, n):
         key_item = arr[i]
         if metrics is not None:
             metrics.moves += 1
 
-        # Shift elements of arr[0..i-1] that come after key_item to one position ahead
+        # Make room by shifting lower-priority items right.
         j = i - 1
         while j >= 0:
             if comes_before(key_item, arr[j], metrics, band_only, rule):
@@ -39,7 +25,7 @@ def insertion_sort(arr, metrics=None, band_only=False, rule="standard"):
             else:
                 break
 
-        # Place the key_item in its correct sorted position
+        # Put the saved item in the gap.
         arr[j + 1] = key_item
         if metrics is not None:
             metrics.moves += 1

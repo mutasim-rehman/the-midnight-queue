@@ -86,7 +86,7 @@ def comes_before_reversed(a, b):
 
 ### Drill 3: "Add a 5th tie-breaker or change the comparator in console.py"
 * **Target:** `console.py` line 364.
-* **Action:** Pass `rule="cr_freshness"` or update the lambda key `key=lambda r: r.triage_key(rule=rule)`.
+* **Action:** Pass `rule="cr_freshness"` or use a named reference-key function that returns `record.triage_key(rule)`.
 
 ---
 

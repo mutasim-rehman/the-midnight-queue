@@ -1,22 +1,9 @@
-"""
-Merge Sort implementation from scratch.
-Uses simple, standard Python with zero external libraries.
-Preallocates a single auxiliary buffer for high performance and stability.
-"""
+"""Merge sort: sort two halves, then join them using one extra list."""
 from src.triage_record import comes_before
 
 
 def merge_sort(arr, metrics=None, band_only=False, rule="standard"):
-    """
-    Sorts arr using Divide-and-Conquer Merge Sort.
-    
-    Time Complexity:
-      - Best, Worst, Average: O(n log n)
-    Space Complexity:
-      - O(n) auxiliary list buffer
-    Stability:
-      - Stable
-    """
+    """Stable. Time: O(n log n). Extra space: O(n)."""
     n = len(arr)
     if n <= 1:
         return arr
@@ -24,7 +11,7 @@ def merge_sort(arr, metrics=None, band_only=False, rule="standard"):
     if metrics is not None:
         metrics.peak_extra_memory = max(metrics.peak_extra_memory, n)
 
-    # Preallocate auxiliary buffer of size n
+    # Reuse this list for every merge.
     aux = [None] * n
 
     def _merge(left, mid, right):
@@ -33,7 +20,7 @@ def merge_sort(arr, metrics=None, band_only=False, rule="standard"):
         k = left
 
         while i <= mid and j <= right:
-            # For stability on equal keys: prefer arr[i] from left subarray
+            # Take the left item on ties to keep the sort stable.
             if comes_before(arr[j], arr[i], metrics, band_only, rule):
                 aux[k] = arr[j]
                 j += 1
@@ -58,7 +45,7 @@ def merge_sort(arr, metrics=None, band_only=False, rule="standard"):
             j += 1
             k += 1
 
-        # Copy back merged items into arr
+        # Copy the joined section back.
         for p in range(left, right + 1):
             arr[p] = aux[p]
             if metrics is not None:

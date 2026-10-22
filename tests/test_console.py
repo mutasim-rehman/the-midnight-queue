@@ -1,56 +1,64 @@
-"""
-Automated unit and integration test for the Analyst Console (Bonus Section 6).
-Verifies:
-1. Web server initialization
-2. HTML dashboard serving
-3. JSON API responses for Top-K Heap, MergeSort, Hardened QuickSort
-4. Change Request rule parameters (standard, cr_freshness, cr_risk)
-"""
-import pytest
-import threading
-import time
-import urllib.request
+"""Check the console using a small dataset and a temporary local server."""
 import json
+import socketserver
+import threading
+import unittest
+import urllib.request
+
 import console
+from tests.test_problem_b import make_dummy_records
 
-@pytest.fixture(scope="module")
-def console_server():
-    server_thread = threading.Thread(target=console.run_server, daemon=True)
-    server_thread.start()
-    time.sleep(1.0)
-    yield "http://127.0.0.1:8050"
 
-def test_html_dashboard_endpoint(console_server):
-    req = urllib.request.Request(f"{console_server}/")
-    with urllib.request.urlopen(req) as resp:
-        assert resp.status == 200
-        content = resp.read().decode("utf-8")
-        assert "The Midnight Queue: Analyst Console" in content
-        assert "Triage Order Rule" in content
+class ConsoleTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.saved_records = console.MASTER_RECORDS
+        console.MASTER_RECORDS = make_dummy_records(1000)
+        # Port 0 asks Windows for a free port.
+        cls.server = socketserver.TCPServer(("127.0.0.1", 0), console.AnalystConsoleHandler)
+        cls.base_url = "http://127.0.0.1:" + str(cls.server.server_address[1])
+        cls.thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
+        cls.thread.start()
 
-def test_api_min_heap_standard(console_server):
-    url = f"{console_server}/api/run?algo=min_heap&cond=C1&n=1000&k=10&rule=standard"
-    with urllib.request.urlopen(url) as resp:
-        assert resp.status == 200
-        data = json.loads(resp.read().decode("utf-8"))
-        assert data["algorithm"] == "min_heap"
-        assert data["k"] == 10
-        assert len(data["records"]) == 10
-        assert data["comparisons"] > 0
-        assert data["moves"] > 0
+    @classmethod
+    def tearDownClass(cls):
+        cls.server.shutdown()
+        cls.server.server_close()
+        cls.thread.join()
+        console.MASTER_RECORDS = cls.saved_records
 
-def test_api_change_request_freshness(console_server):
-    url = f"{console_server}/api/run?algo=min_heap&cond=C1&n=1000&k=10&rule=cr_freshness"
-    with urllib.request.urlopen(url) as resp:
-        assert resp.status == 200
-        data = json.loads(resp.read().decode("utf-8"))
-        assert data["algorithm"] == "min_heap"
-        assert len(data["records"]) == 10
+    def test_html_dashboard_endpoint(self):
+        with urllib.request.urlopen(self.base_url + "/", timeout=10) as response:
+            assert response.status == 200
+            content = response.read().decode("utf-8")
+            assert "The Midnight Queue: Analyst Console" in content
+            assert "Triage Order Rule" in content
 
-def test_api_merge_sort_full(console_server):
-    url = f"{console_server}/api/run?algo=merge_sort&cond=C1&n=1000&k=10&rule=standard"
-    with urllib.request.urlopen(url) as resp:
-        assert resp.status == 200
-        data = json.loads(resp.read().decode("utf-8"))
-        assert data["algorithm"] == "merge_sort"
-        assert len(data["records"]) == 10
+    def test_api_algorithms_and_rules(self):
+        algorithms = ["min_heap", "bounded_buffer", "merge_sort", "quick_hardened", "heap_sort"]
+        rules = ["standard", "cr_freshness", "cr_risk"]
+        for algorithm in algorithms:
+            for rule in rules:
+                with self.subTest(algorithm=algorithm, rule=rule):
+                    url = self.base_url + "/api/run?algo=" + algorithm
+                    url += "&cond=C1&n=1000&k=10&rule=" + rule
+                    with urllib.request.urlopen(url, timeout=10) as response:
+                        assert response.status == 200
+                        data = json.loads(response.read().decode("utf-8"))
+                    assert data["algorithm"] == algorithm
+                    assert data["k"] == 10
+                    assert len(data["records"]) == 10
+                    assert data["comparisons"] > 0
+                    assert data["moves"] > 0
+
+                    def reference_key(record):
+                        return record.triage_key(rule)
+
+                    expected = sorted(console.MASTER_RECORDS, key=reference_key)[:10]
+                    for index in range(10):
+                        assert data["records"][index]["txn_id"] == expected[index].txn_id
+
+    def test_missing_page(self):
+        with self.assertRaises(urllib.error.HTTPError) as error:
+            urllib.request.urlopen(self.base_url + "/missing", timeout=10)
+        assert error.exception.code == 404
