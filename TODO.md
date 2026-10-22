@@ -7,7 +7,7 @@
 
 ---
 
-## 📌 0. Personal Parameters & Project Setup
+## 0. Personal Parameters & Project Setup
 
 - [x] **Configure Roll Number Parameters**:
   - [x] Determine student roll number digits $s$: `s = 2514`
@@ -20,7 +20,7 @@
 
 ---
 
-## ⚖️ Ground Rules & Engineering Constraints
+## Ground Rules & Engineering Constraints
 
 - [x] **No Built-in Sorts:** Implement all sorting algorithms from scratch (no `sort()`, `sorted()`, or `np.sort` within contenders; built-ins allowed only as baseline/oracle).
 - [x] **Identical Inputs:** Every contender in every benchmark gets a fresh, identical deep copy of the input.
@@ -35,7 +35,7 @@
 
 ---
 
-## 📅 Phased Implementation Checklist
+## Phased Implementation Checklist
 
 ```mermaid
 flowchart TD
@@ -216,7 +216,7 @@ Write concise, engineering-grade recommendations for the platform lead covering 
 
 ### Phase 8: Deliverables Packaging & Viva Defense Prep
 
-- [x] **PDF Report Generation (`24i-2514-A2-A.pdf` & `24i-2514-A2-B.pdf`)**:
+- [x] **PDF Report Generation (`24i-2514-A2-B.pdf`)**:
   - [x] Strictly adhere to **$\le 5$ pages limit** for body (Problems A–H + Addendum + AI disclosure).
   - [x] Append Prediction Log as appendix.
   - [x] Ensure all plots have labeled axes with units, complete legends, and descriptive captions.
@@ -227,5 +227,5 @@ Write concise, engineering-grade recommendations for the platform lead covering 
   - [x] Clean code structure with test suite and reproduction script (`README.md`).
   - [x] Ensure no dataset (`creditcard.csv`) or temporary caches are zipped.
 - [x] **Viva Defense Preparation (20 Marks)**:
-  - [x] Practice explaining code mechanics and modifying algorithms live on unseen inputs (`reports/viva_defense_guide.md`).
+  - [x] Practice explaining code mechanics and modifying algorithms live on unseen inputs.
   - [x] Prepare mathematical justification for every anomaly or clash between theory and measurement.

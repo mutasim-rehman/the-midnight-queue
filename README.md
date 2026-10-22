@@ -30,7 +30,7 @@ Read the code in this order: `triage_record.py`, `metrics.py`, `dataset.py`, `co
 
 ---
 
-## 📖 1. Project Overview & Problem Statement
+## 1. Project Overview & Problem Statement
 
 A payments processor handles over 284,000 credit card transactions over a 48-hour period. Human fraud analysts can inspect only **$K$ transactions per shift** ($K = 53$). Transactions ranked below position $K$ are never reviewed.
 
@@ -46,7 +46,7 @@ The goal of this project is to build, benchmark, analyze, and mathematically def
 
 ---
 
-## 🧱 2. Design Philosophy: Simple Python & Zero External Sorting Libraries
+## 2. Design Philosophy: Simple Python & Zero External Sorting Libraries
 
 - **Clean, Elementary Python:** Code is written with straightforward loops (`for`, `while`), basic lists, and elementary classes. No obscure syntax, no metaclasses, no complex decorators, and no third-party sorting/heap libraries (`heapq`, `scipy`, etc.).
 - **Viva-Defensible:** Every algorithm is intuitive and easy to trace line-by-line during live code examinations.
@@ -54,7 +54,7 @@ The goal of this project is to build, benchmark, analyze, and mathematically def
 
 ---
 
-## 🗂️ 3. Project Structure & File Guide
+## 3. Project Structure & File Guide
 
 ```
 the-midnight-queue/
@@ -173,7 +173,7 @@ the-midnight-queue/
 
 ---
 
-## 🔄 4. Inter-File Relationships & Architecture Flow
+## 4. Inter-File Relationships & Architecture Flow
 
 The diagram below illustrates how data and control flow through the system:
 
@@ -213,7 +213,7 @@ flowchart TD
 
 ---
 
-## 🧪 5. How to Run Tests & Verify Correctness
+## 5. How to Run Tests & Verify Correctness
 
 The project includes an automated test suite verifying edge cases, stability, total order correctness, and crash recovery.
 
@@ -235,7 +235,7 @@ python -m unittest tests.test_problem_b -v
 
 ---
 
-## 🚀 6. How to Reproduce All Deliverables
+## 6. How to Reproduce All Deliverables
 
 ### A. Run Full Test Suite
 ```bash
@@ -254,17 +254,15 @@ py console.py
 - `stage_4_shift_queue.ipynb`: Problem D Shift Queue & Problem E Live Streaming Ingestion ($K=53$).
 
 ### D. Deliverable Reports & Artifacts
-- `24i-2514-A2-A.pdf`: Final verified 5-page PDF report.
+- `24i-2514-A2-B.pdf`: Final verified 5-page PDF report.
 - `results.csv`: Empirical benchmark results for all 30 cells.
-- `reports/`: Complete theoretical proofs (M1-M8), executive recommendations, Problem G change request, and viva defense guide.
+- `reports/`: Complete theoretical proofs (M1-M8), executive recommendations, and Problem G change request.
 
 ---
 
-## 📚 7. Master Documentation Directory (`reports/`)
+## 7. Master Documentation Directory (`reports/`)
 
-- **[`reports/master_codebase_and_demo_guide.md`](file:///d:/the-midnight-queue/reports/master_codebase_and_demo_guide.md):** **Master Reading Order & Viva Defense Playbook** — 7-step reading sequence, 60-second live demo script, in-depth question bank with model answers, and live code modification drills.
 - **[`reports/problem_f_mathematical_case.md`](file:///d:/the-midnight-queue/reports/problem_f_mathematical_case.md):** Complete mathematical derivations (M1 to M8) including recurrence unrolling, recursion trees, Master's Theorem, exact inversion count ($I = 262,763,679$), and Lomuto duplicate combinatorics.
 - **[`reports/problem_h_recommendations.md`](file:///d:/the-midnight-queue/reports/problem_h_recommendations.md):** Executive Recommendations for the Platform Lead covering Overnight Batch, Shift Queue, and Live Streaming Refresh.
 - **[`reports/problem_g_change_request.md`](file:///d:/the-midnight-queue/reports/problem_g_change_request.md):** Formal Problem G Addendum analyzing burst fraud mitigation (Freshest First CR-A vs. Continuous Risk CR-B), Algorithmic Impact Matrix, and fresh measurements.
-- **[`reports/viva_defense_guide.md`](file:///d:/the-midnight-queue/reports/viva_defense_guide.md):** Oral examination prep guide, top 10 viva questions and model answers, and examiner live code modification drills.
 

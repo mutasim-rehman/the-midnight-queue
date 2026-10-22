@@ -7,7 +7,7 @@
 
 ---
 
-## 🎯 Executive Summary
+## Executive Summary
 
 Following extensive empirical benchmarking across 120 tournament configurations (Problem C) and continuous streaming simulations (Problems D & E), this document delivers formal, engineering-grade architectural recommendations for the platform's three distinct ranking workloads:
 
@@ -19,7 +19,7 @@ Each recommendation specifies the exact algorithm/data structure, justifies the 
 
 ---
 
-## 🏛️ Job 1: Overnight Batch (Full-Day Batch Ranking)
+## Job 1: Overnight Batch (Full-Day Batch Ranking)
 
 ### 1. Deployed Algorithm
 **Merge Sort** (scratch-built, out-of-place with a single pre-allocated auxiliary list `aux`).
@@ -46,7 +46,7 @@ Each recommendation specifies the exact algorithm/data structure, justifies the 
 
 ---
 
-## ⚡ Job 2: Shift Queue (Real-Time Selection of Top $K$ Cases)
+## Job 2: Shift Queue (Real-Time Selection of Top $K$ Cases)
 
 ### 1. Deployed Data Structure
 **Size-$K$ Min-Heap** (`top_k_min_heap` initialized with capacity $K = 53$).
@@ -72,7 +72,7 @@ Each recommendation specifies the exact algorithm/data structure, justifies the 
 
 ---
 
-## 🌊 Job 3: Live Refresh (Streaming Updates per Window)
+## Job 3: Live Refresh (Streaming Updates per Window)
 
 ### 1. Deployed Streaming Strategy
 **Strategy (b): Persistent Streaming Min-Heap** (Size-$K$ Min-Heap maintained across window boundaries).
@@ -99,7 +99,7 @@ Each recommendation specifies the exact algorithm/data structure, justifies the 
 
 ---
 
-## 📊 Operational Decision Matrix for Platform Engineering
+## Operational Decision Matrix for Platform Engineering
 
 | Architectural Dimension | Job 1: Overnight Batch | Job 2: Shift Queue | Job 3: Live Refresh |
 | :--- | :--- | :--- | :--- |
@@ -114,7 +114,7 @@ Each recommendation specifies the exact algorithm/data structure, justifies the 
 
 ---
 
-## 🔄 End-to-End Platform Architecture Flow
+## End-to-End Platform Architecture Flow
 
 ```mermaid
 flowchart TD
@@ -142,7 +142,7 @@ flowchart TD
 
 ---
 
-## 🏁 Summary of Recommendations for the Report Body
+## Summary of Recommendations for the Report Body
 
 1. **Overnight Batch:** Ship **Merge Sort**. It is deterministic, stable, unaffected by input permutations, and finishes in **$3.77\text{ s}$**. Fallback to Heap Sort only if RAM is zero.
 2. **Shift Queue:** Ship **Size-$K$ Min-Heap**. It delivers a **$35\times$ speedup** over full sorting, requires **$424\text{ bytes}$** of memory, and avoids Bounded Buffer's $O(K)$ element shifts.

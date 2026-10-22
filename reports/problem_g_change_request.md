@@ -8,7 +8,7 @@
 
 ---
 
-## 📑 Executive Summary
+## Executive Summary
 
 Forty-eight hours prior to production deployment, the Platform Lead issued an operational **Change Request (CR)** modifying the transaction triage order. Live operational intelligence revealed that coordinated fraud syndicates were launching synchronized, high-frequency burst attacks. Under the original triage order, older transactions took priority on equal amounts ($\text{Time} \uparrow$), leaving active, live burst frauds sitting unaddressed at the back of the queue.
 
@@ -16,7 +16,7 @@ This document constitutes the formal **Problem G Addendum**. It specifies the ex
 
 ---
 
-## 🔄 1. Formal Change Request Specification
+## 1. Formal Change Request Specification
 
 The triage engine was evaluated against two operational variants: the primary mandate issued by the platform lead (**CR-A**), and an alternative cost-sensitive proposal (**CR-B**).
 
@@ -37,7 +37,7 @@ $$\text{band} \downarrow \;\longrightarrow\; \mathbf{risk \downarrow} \;\longrig
 
 ---
 
-## ⚖️ 2. Algorithmic Impact Matrix: Valid vs. Invalidated Conclusions
+## 2. Algorithmic Impact Matrix: Valid vs. Invalidated Conclusions
 
 A change to the comparison predicate alters the permutations of the total order. However, because both CR-A and CR-B preserve the mathematical properties of a **strict total order** (irreflexivity, antisymmetry, and transitivity), the core algorithmic infrastructure remains solid.
 
@@ -54,7 +54,7 @@ A change to the comparison predicate alters the permutations of the total order.
 
 ---
 
-## 📊 3. Fresh Empirical Measurements
+## 3. Fresh Empirical Measurements
 
 All measurements below were recorded on the full $284{,}807$ transaction dataset ($s = 2514$) using clean Python standard library implementations.
 
@@ -90,7 +90,7 @@ All measurements below were recorded on the full $284{,}807$ transaction dataset
 
 ---
 
-## 📈 4. Visual Analysis & Empirical Plots
+## 4. Visual Analysis & Empirical Plots
 
 The empirical data was plotted using pure `matplotlib` and saved directly to the project figures repository:
 
@@ -128,7 +128,7 @@ Recall (%)
 
 ---
 
-## 🏛️ 5. Updated Executive Recommendations for the Platform Lead
+## 5. Updated Executive Recommendations for the Platform Lead
 
 In light of the fresh empirical data, we update our Problem H recommendations:
 
@@ -148,7 +148,7 @@ In light of the fresh empirical data, we update our Problem H recommendations:
 
 ---
 
-## 💻 6. Section 6 Bonus Deliverable: The Analyst Console
+## 6. Section 6 Bonus Deliverable: The Analyst Console
 
 To provide fraud analysts with immediate, transparent visibility into algorithmic behavior, we developed **The Analyst Console** (`console.py`).
 
@@ -183,7 +183,7 @@ python -m unittest tests.test_console -v
 
 ---
 
-## 📌 Checklist Summary for Phase 7
+## Checklist Summary for Phase 7
 
 - [x] Implemented Change Request comparator rules (`cr_freshness` and `cr_risk`) across `src/triage_record.py` and all algorithms.
 - [x] Verified full backwards compatibility: the Problem B checks and subtests pass (`python -m unittest tests.test_problem_b -v`).

@@ -7,7 +7,7 @@
 
 ---
 
-## 📌 Overview of Mathematical Proofs
+## Overview of Mathematical Proofs
 
 This document contains formal derivations, recurrence solutions, and asymptotic bounds for all 8 items of Problem F as specified in Section 5 of the assignment. Every proof adheres strictly to the mandated method (direct analysis, iteration/unrolling, recursion tree, Master Theorem, or order statistics) and is grounded with empirical parameters measured on the European cardholder dataset ($n = 284{,}807$, seed $s = 2514$).
 
@@ -385,7 +385,7 @@ Below is the explicit space complexity breakdown distinguishing between in-place
 
 ---
 
-## 🏆 Summary Checklist of Phase 5 Deliverables
+## Summary Checklist of Phase 5 Deliverables
 
 * [x] **M1:** Direct analysis of Insertion Sort (best, worst, average), $\Theta(n + I)$ formula, exact C5 inversion counts ($I = 262{,}763{,}679$ on full dataset).
 * [x] **M2:** Merge Sort iteration unrolling to $cn \log_2 n + dn$ and Master Theorem Case 2 verification.
